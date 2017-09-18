@@ -27,6 +27,7 @@ public class FormulaTest {
   private static Formula x3 = F.var3;
   private static Formula x4 = F.var4;
   private static Formula x5 = F.var5;
+  
 
   @BeforeClass
   public static void initialize() {
@@ -94,5 +95,23 @@ public class FormulaTest {
   @Test(expected = IllegalArgumentException.class)
   public void testEvaluateException() {
     F.f14.evaluate(assignment);
+  }
+  
+  @Test
+  public void testSynt() {
+	  assertTrue (Formula.VERUM.syntEqual(Formula.VERUM));
+	  assertFalse (Formula.VERUM.syntEqual(Formula.FALSUM));
+	  assertTrue (Formula.FALSUM.syntEqual(Formula.FALSUM));
+	  assertFalse (Formula.FALSUM.syntEqual(Formula.VERUM));
+	  assertTrue (new Not (Formula.VERUM).syntEqual(new Not (Formula.VERUM)));
+	  assertFalse (new Not (Formula.VERUM).syntEqual(Formula.VERUM));
+	  assertTrue (new And (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.FALSUM)));
+	  assertFalse (new And (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.VERUM)));
+	  assertFalse (new And (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.FALSUM, Formula.FALSUM)));
+	  assertFalse (new And (Formula.VERUM, Formula.FALSUM).syntEqual(Formula.VERUM));
+	  assertTrue (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new Or (Formula.VERUM, Formula.FALSUM)));
+	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.FALSUM)));
+	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new Or (Formula.FALSUM, Formula.FALSUM)));
+	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(Formula.VERUM));
   }
 }

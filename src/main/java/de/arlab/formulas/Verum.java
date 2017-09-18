@@ -32,7 +32,7 @@ public final class Verum extends Formula {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
+	  return other instanceof Verum;
   }
 
   @Override

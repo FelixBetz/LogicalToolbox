@@ -25,8 +25,8 @@ public final class Or extends BinaryFormula {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
-  }
+	    return (other instanceof Or) && left.syntEqual(((Or) other).getLeft()) && right.syntEqual(((Or) other).getRight());
+	  }
 
   @Override
   public Formula simplify() {

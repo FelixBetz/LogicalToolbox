@@ -34,7 +34,7 @@ public final class Not extends Formula {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
+    return (other instanceof Not) && operand.syntEqual(((Not) other).getOperand());
   }
 
   @Override

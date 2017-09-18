@@ -32,7 +32,7 @@ public final class Falsum extends Formula {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
+	  return other instanceof Falsum;
   }
 
   @Override

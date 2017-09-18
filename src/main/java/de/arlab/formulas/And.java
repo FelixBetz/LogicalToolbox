@@ -25,8 +25,8 @@ public final class And extends BinaryFormula {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
-  }
+	    return (other instanceof And) && left.syntEqual(((And) other).getLeft()) && right.syntEqual(((And) other).getRight());
+	  }
 
   @Override
   public Formula simplify() {
