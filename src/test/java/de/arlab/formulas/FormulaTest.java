@@ -199,7 +199,7 @@ public class FormulaTest {
 		assertEquals(new And(v1,v2).cnf(), new And(v1,v2));
 		assertEquals(new Or(v1,v2).cnf(), new Or(v1,v2));
 		assertEquals(new Or(v1,new And(v2,v3)).cnf(), new And(new Or(v1,v2),new Or(v1,v3)));
-		assertEquals(new Or(new And(v1,v2),v3),new And(new Or(v1,v3),new Or(v2,v3)));
+		assertEquals(new Or(new And(v1,v2),v3).cnf(), new And(new Or(v1,v3),new Or(v2,v3)));
 		assertEquals(t.nnf(), t);
 		assertEquals(f.nnf(), f);
 		assertEquals(new Not(t).nnf(), f);

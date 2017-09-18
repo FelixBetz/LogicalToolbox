@@ -48,7 +48,7 @@ public final class Or extends BinaryFormula {
 		if (newRight instanceof Falsum) {
 			return newLeft;
 		}
-		return new Or(newLeft,newRight);
+		return new Or(newLeft, newRight);
 	}
 
 	@Override
@@ -98,16 +98,18 @@ public final class Or extends BinaryFormula {
 
 	@Override
 	public Formula cnf() {
-		if (this.isCNF()) {
-			return this;
+		if (this.isNNF()) {
+			if (this.isCNF()) {
+				return this;
+			}
+			if (right instanceof And) {
+				And a = (And) right;
+				return new And(new Or(left, a.getLeft()).cnf(), new Or(left, a.getRight()).cnf());
+			}
+			And a = (And) left;
+			return new And(new Or(a.getLeft(), right).cnf(), new Or(a.getRight(), right).cnf());
 		}
-		if (right instanceof And) {
-			And a = (And) right;
-			return new And(new Or(left,a.getLeft()).cnf(), new Or(left, a.getRight()).cnf());
-		}
-		And a = (And) left;
-		return new And(new Or(a.getLeft(), right).cnf(), new Or(a.getRight(),right).cnf());
-		
+		return this.nnf().cnf();
 	}
 
 	@Override

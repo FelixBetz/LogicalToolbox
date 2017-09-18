@@ -115,7 +115,10 @@ public final class Not extends Formula {
 
 	@Override
 	public Formula cnf() {
-		throw new ToBeImplementedException();
+		if (this.isNNF()) {
+			return this;
+		} 
+		return this.nnf().cnf();
 	}
 
 	@Override

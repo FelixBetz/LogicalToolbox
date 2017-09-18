@@ -123,16 +123,7 @@ public abstract class Formula {
 	 * 
 	 * @return an equivalent formula in CNF
 	 */
-	public Formula cnf() {
-		Formula nnf = this.nnf();
-		if (nnf instanceof And) {
-			return ((And) nnf).cnf();
-		}
-		if (nnf instanceof Or) {
-			return ((Or) nnf).cnf();
-		}
-		return this;
-	}
+	public abstract Formula cnf();
 
 	/**
 	 * Computes an equivalent formula in DNF.
