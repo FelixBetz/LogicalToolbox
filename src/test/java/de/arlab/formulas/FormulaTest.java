@@ -113,5 +113,7 @@ public class FormulaTest {
 	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.FALSUM)));
 	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new Or (Formula.FALSUM, Formula.FALSUM)));
 	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(Formula.VERUM));
+	  assertTrue (x1.syntEqual(x1));
+	  assertFalse (x1.syntEqual(x2));
   }
 }

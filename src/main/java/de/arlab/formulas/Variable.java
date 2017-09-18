@@ -36,7 +36,7 @@ public final class Variable extends Formula implements Comparable<Variable> {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
+    return (other instanceof Variable) && (name.equals(((Variable) other).getName()));
   }
 
   @Override
