@@ -46,17 +46,21 @@ public final class Variable extends Formula implements Comparable<Variable> {
 
   @Override
   public Formula substitute(final Variable var, final Formula formula) {
-    throw new ToBeImplementedException();
+    if (this.equals(var)) {
+    	return formula;
+    } else {
+    	return this;
+    }
   }
 
   @Override
   public boolean isAtomicFormula() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isLiteral() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override

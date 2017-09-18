@@ -42,17 +42,17 @@ public final class Falsum extends Formula {
 
   @Override
   public Formula substitute(final Variable var, final Formula formula) {
-    throw new ToBeImplementedException();
+	  return this;
   }
 
   @Override
   public boolean isAtomicFormula() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isLiteral() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override

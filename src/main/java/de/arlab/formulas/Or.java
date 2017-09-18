@@ -47,17 +47,17 @@ public final class Or extends BinaryFormula {
 
   @Override
   public Formula substitute(final Variable var, final Formula formula) {
-    throw new ToBeImplementedException();
-  }
+	    return new Or(left.substitute(var, formula), right.substitute(var, formula));
+	  }
 
   @Override
   public boolean isAtomicFormula() {
-    throw new ToBeImplementedException();
+    return false;
   }
 
   @Override
   public boolean isLiteral() {
-    throw new ToBeImplementedException();
+    return false;
   }
 
   @Override

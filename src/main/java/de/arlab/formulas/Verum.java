@@ -42,7 +42,7 @@ public final class Verum extends Formula {
 
   @Override
   public Formula substitute(final Variable var, final Formula formula) {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override
