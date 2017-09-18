@@ -122,7 +122,7 @@ public abstract class Formula {
 		  And a = (And) op;
 		  return new Or(new Not(a.getLeft()),new Not(a.getRight()));
 	  } 
-	  if (op instanceof And) {
+	  if (op instanceof Or) {
 		  Or o = (Or) op;
 		  return new And(new Not(o.getLeft()),new Not(o.getRight()));
 	  } 
