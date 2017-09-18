@@ -30,19 +30,21 @@ public final class And extends BinaryFormula {
 
   @Override
   public Formula simplify() {
-    if (left.equals(right)) {
-    	return left.simplify();
+	Formula newLeft = left.simplify();
+	Formula newRight = right.simplify();
+    if (newLeft.equals(newRight)) {
+    	return newLeft;
     }
-    if ((left instanceof Falsum) || (right instanceof Falsum)) {
+    if ((newLeft instanceof Falsum) || (newRight instanceof Falsum)) {
     	return Formula.FALSUM;
     }
-    if (left instanceof Verum) {
-    	return right.simplify();
+    if (newLeft instanceof Verum) {
+    	return newRight;
     }
-    if (right instanceof Verum) {
-    	return left.simplify();
+    if (newRight instanceof Verum) {
+    	return newLeft;
     }
-    return new And(left.simplify(), right.simplify()).simplify();
+    return new And(newLeft,newRight);
   }
 
   @Override
@@ -87,12 +89,12 @@ public final class And extends BinaryFormula {
 
   @Override
   public Formula nnf() {
-    throw new ToBeImplementedException();
+    return new And(left.nnf(), right.nnf()).simplify();
   }
 
   @Override
   public Formula cnf() {
-    throw new ToBeImplementedException();
+    return new And(left.cnf(), right.cnf());
   }
 
   @Override

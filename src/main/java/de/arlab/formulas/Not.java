@@ -98,7 +98,19 @@ public final class Not extends Formula {
 
 	@Override
 	public Formula nnf() {
-		throw new ToBeImplementedException();
+	   if (operand instanceof Variable) {
+		   return this;
+	   } 
+	   if (operand instanceof Falsum) {
+		   return Formula.VERUM;
+	   }
+	   if (operand instanceof Verum) {
+		   return Formula.FALSUM;
+	   }
+	   if (operand instanceof Not) {
+		   return ((Not) operand).getOperand().nnf();
+	   }
+	   return Formula.applyDeMorgan(this).nnf();
 	}
 
 	@Override

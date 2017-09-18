@@ -82,17 +82,17 @@ public final class Falsum extends Formula {
 
   @Override
   public Formula nnf() {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override
   public Formula cnf() {
-    throw new ToBeImplementedException();
+	    return this;
   }
 
   @Override
   public Formula dnf() {
-    throw new ToBeImplementedException();
+	    return this;
   }
 
   @Override
