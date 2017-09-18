@@ -101,10 +101,34 @@ public class FormulaTest {
 
   @Test
   public void testSimp() {
+	  //not
 	  assertEquals (new Not(t).simplify(), f);
 	  assertEquals (new Not(f).simplify(), t);
 	  assertEquals (new Not(new Not(f)).simplify(), f);
 	  assertEquals (new Not(new Not(t)).simplify(), t);
+	  
+	  //and
+	  assertEquals ( new And(t,t).simplify(), t);
+	  assertEquals ( new And(f,f).simplify(),f);
+	  assertEquals ( new And(x1,x1).simplify(), x1);
+	  assertEquals ( new And(x1,t).simplify(), x1);
+	  assertEquals ( new And(t,x1).simplify(), x1);
+	  assertEquals ( new And(x1,f).simplify(), f);
+	  assertEquals ( new And(f,x1).simplify(), f);
+	  assertEquals ( new And(x1,new Not(f)).simplify(),x1);
+	  
+	  //or 
+	  assertEquals ( new Or(t,t).simplify(), t);
+	  assertEquals ( new Or(f,f).simplify(),f);
+	  assertEquals ( new Or(x1,x1).simplify(), x1);
+	  assertEquals ( new Or(x1,t).simplify(), t);
+	  assertEquals ( new Or(t,x1).simplify(), t);
+	  assertEquals ( new Or(x1,f).simplify(), x1);
+	  assertEquals ( new Or(f,x1).simplify(), x1);
+	  assertEquals ( new Or(x1,new Not(t)).simplify(),x1);
+	  
+	  //Variable
+	  assertEquals (x1.simplify(),x1);
   }
   
   @Test
