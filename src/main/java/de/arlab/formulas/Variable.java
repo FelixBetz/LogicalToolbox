@@ -41,7 +41,7 @@ public final class Variable extends Formula implements Comparable<Variable> {
 
   @Override
   public Formula simplify() {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override

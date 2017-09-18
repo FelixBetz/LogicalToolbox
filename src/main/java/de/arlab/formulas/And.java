@@ -30,7 +30,19 @@ public final class And extends BinaryFormula {
 
   @Override
   public Formula simplify() {
-    throw new ToBeImplementedException();
+    if (left.equals(right)) {
+    	return left.simplify();
+    }
+    if ((left instanceof Falsum) || (right instanceof Falsum)) {
+    	return Formula.FALSUM;
+    }
+    if (left instanceof Verum) {
+    	return right.simplify();
+    }
+    if (right instanceof Verum) {
+    	return left.simplify();
+    }
+    return new And(left.simplify(), right.simplify()).simplify();
   }
 
   @Override

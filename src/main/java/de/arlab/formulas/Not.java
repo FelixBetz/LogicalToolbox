@@ -39,7 +39,18 @@ public final class Not extends Formula {
 
   @Override
   public Formula simplify() {
-    throw new ToBeImplementedException();
+	  if (operand instanceof Verum) {
+		  return Formula.FALSUM;
+	  }
+	  if (operand instanceof Falsum) {
+		  return Formula.VERUM;
+	  }
+	  if (operand instanceof Not) {
+		 return ((Not) operand).getOperand().simplify();
+	  } else {
+		  return new Not(operand.simplify());
+	  }
+
   }
 
   @Override

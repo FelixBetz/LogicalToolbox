@@ -37,7 +37,7 @@ public final class Falsum extends Formula {
 
   @Override
   public Formula simplify() {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override

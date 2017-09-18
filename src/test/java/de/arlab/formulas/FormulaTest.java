@@ -28,6 +28,8 @@ public class FormulaTest {
   private static Formula x4 = F.var4;
   private static Formula x5 = F.var5;
   
+  private Formula t = Formula.VERUM;
+  private Formula f = Formula.FALSUM;
 
   @BeforeClass
   public static void initialize() {
@@ -96,24 +98,33 @@ public class FormulaTest {
   public void testEvaluateException() {
     F.f14.evaluate(assignment);
   }
+
+  @Test
+  public void testSimp() {
+	  assertEquals (new Not(t).simplify(), f);
+	  assertEquals (new Not(f).simplify(), t);
+	  assertEquals (new Not(new Not(f)).simplify(), f);
+	  assertEquals (new Not(new Not(t)).simplify(), t);
+  }
   
   @Test
   public void testSynt() {
-	  assertTrue (Formula.VERUM.syntEqual(Formula.VERUM));
-	  assertFalse (Formula.VERUM.syntEqual(Formula.FALSUM));
-	  assertTrue (Formula.FALSUM.syntEqual(Formula.FALSUM));
-	  assertFalse (Formula.FALSUM.syntEqual(Formula.VERUM));
-	  assertTrue (new Not (Formula.VERUM).syntEqual(new Not (Formula.VERUM)));
-	  assertFalse (new Not (Formula.VERUM).syntEqual(Formula.VERUM));
-	  assertTrue (new And (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.FALSUM)));
-	  assertFalse (new And (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.VERUM)));
-	  assertFalse (new And (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.FALSUM, Formula.FALSUM)));
-	  assertFalse (new And (Formula.VERUM, Formula.FALSUM).syntEqual(Formula.VERUM));
-	  assertTrue (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new Or (Formula.VERUM, Formula.FALSUM)));
-	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new And (Formula.VERUM, Formula.FALSUM)));
-	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(new Or (Formula.FALSUM, Formula.FALSUM)));
-	  assertFalse (new Or (Formula.VERUM, Formula.FALSUM).syntEqual(Formula.VERUM));
+	  assertTrue (t.syntEqual(t));
+	  assertFalse (t.syntEqual(f));
+	  assertTrue (f.syntEqual(f));
+	  assertFalse (f.syntEqual(t));
+	  assertTrue (new Not (t).syntEqual(new Not (t)));
+	  assertFalse (new Not (t).syntEqual(t));
+	  assertTrue (new And (t, f).syntEqual(new And (t, f)));
+	  assertFalse (new And (t, f).syntEqual(new And (t, t)));
+	  assertFalse (new And (t, f).syntEqual(new And (f, f)));
+	  assertFalse (new And (t, f).syntEqual(t));
+	  assertTrue (new Or (t, f).syntEqual(new Or (t, f)));
+	  assertFalse (new Or (t, f).syntEqual(new And (t, f)));
+	  assertFalse (new Or (t, f).syntEqual(new Or (f, f)));
+	  assertFalse (new Or (t, f).syntEqual(t));
 	  assertTrue (x1.syntEqual(x1));
 	  assertFalse (x1.syntEqual(x2));
   }
+  
 }

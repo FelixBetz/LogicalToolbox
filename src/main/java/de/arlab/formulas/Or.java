@@ -30,7 +30,19 @@ public final class Or extends BinaryFormula {
 
   @Override
   public Formula simplify() {
-    throw new ToBeImplementedException();
+    if (left.equals(right)) {
+    	return left.simplify();
+    }
+    if ((left instanceof Verum) || (right instanceof Verum)) {
+    	return Formula.VERUM;
+    }
+    if (left instanceof Falsum) {
+    	return right.simplify();
+    }
+    if (right instanceof Falsum) {
+    	return left.simplify();
+    }
+    return new Or(left.simplify(), right.simplify()).simplify();
   }
 
   @Override
