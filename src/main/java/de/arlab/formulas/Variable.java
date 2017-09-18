@@ -65,27 +65,27 @@ public final class Variable extends Formula implements Comparable<Variable> {
 
   @Override
   public boolean isClause() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isMinterm() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isNNF() {
-    throw new ToBeImplementedException();
+	    return true;
   }
 
   @Override
   public boolean isCNF() {
-    throw new ToBeImplementedException();
+	    return true;
   }
 
   @Override
   public boolean isDNF() {
-    throw new ToBeImplementedException();
+	    return true;
   }
 
   @Override

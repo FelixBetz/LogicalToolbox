@@ -62,27 +62,27 @@ public final class And extends BinaryFormula {
 
   @Override
   public boolean isClause() {
-    throw new ToBeImplementedException();
+    return false;
   }
 
   @Override
   public boolean isMinterm() {
-    throw new ToBeImplementedException();
+    return left.isMinterm() && right.isMinterm();
   }
 
   @Override
   public boolean isNNF() {
-    throw new ToBeImplementedException();
+    return left.isNNF() && right.isNNF();
   }
 
   @Override
   public boolean isCNF() {
-    throw new ToBeImplementedException();
+    return left.isCNF() && right.isCNF();
   }
 
   @Override
   public boolean isDNF() {
-    throw new ToBeImplementedException();
+    return left.isMinterm() && right.isMinterm();
   }
 
   @Override

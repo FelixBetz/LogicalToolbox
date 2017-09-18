@@ -62,22 +62,22 @@ public final class Or extends BinaryFormula {
 
   @Override
   public boolean isClause() {
-    throw new ToBeImplementedException();
+    return left.isClause() && right.isClause();
   }
 
   @Override
   public boolean isMinterm() {
-    throw new ToBeImplementedException();
+    return false;
   }
 
   @Override
   public boolean isNNF() {
-    throw new ToBeImplementedException();
+	    return left.isNNF() && right.isNNF();
   }
 
   @Override
   public boolean isCNF() {
-    throw new ToBeImplementedException();
+	    return left.isClause() && right.isClause();
   }
 
   @Override
@@ -87,7 +87,7 @@ public final class Or extends BinaryFormula {
 
   @Override
   public boolean isDNF() {
-    throw new ToBeImplementedException();
+	    return left.isDNF() && right.isDNF();
   }
 
   @Override
