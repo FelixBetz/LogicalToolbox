@@ -30,6 +30,9 @@ public class FormulaTest {
   
   private Formula t = Formula.VERUM;
   private Formula f = Formula.FALSUM;
+  
+  private Variable v1 = new Variable("v1");
+  
 
   @BeforeClass
   public static void initialize() {
@@ -116,7 +119,7 @@ public class FormulaTest {
 	  assertEquals ( new And(x1,f).simplify(), f);
 	  assertEquals ( new And(f,x1).simplify(), f);
 	  assertEquals ( new And(x1,new Not(f)).simplify(),x1);
-	  
+	  assertEquals ( new And(new Not(f),x1).simplify(),x1);
 	  //or 
 	  assertEquals ( new Or(t,t).simplify(), t);
 	  assertEquals ( new Or(f,f).simplify(),f);
@@ -126,11 +129,21 @@ public class FormulaTest {
 	  assertEquals ( new Or(x1,f).simplify(), x1);
 	  assertEquals ( new Or(f,x1).simplify(), x1);
 	  assertEquals ( new Or(x1,new Not(t)).simplify(),x1);
-	  
+	  assertEquals ( new Or(new Not(t),x1).simplify(),x1);
 	  //Variable
 	  assertEquals (x1.simplify(),x1);
   }
 
+  @Test
+  public void testSubstitue() {
+	  assertEquals (v1.substitute(v1, new Or(x1,x2)),new Or(x1,x2));
+	  assertEquals (new And(v1,v1).substitute(v1, x1),new And(x1,x1));
+	  assertEquals (new Or(v1,v1).substitute(v1, x1),new Or(x1,x1));
+	  assertEquals (new Not(v1).substitute(v1, x1),new Not(x1));
+	  assertEquals (t.substitute(v1, x1),t);
+	  assertEquals (f.substitute(v1, x1),f);
+  }
+  
   @Test
   public void testSynt() {
 	  assertTrue (t.syntEqual(t));
