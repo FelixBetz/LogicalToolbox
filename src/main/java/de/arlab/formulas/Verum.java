@@ -47,12 +47,12 @@ public final class Verum extends Formula {
 
   @Override
   public boolean isAtomicFormula() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isLiteral() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override

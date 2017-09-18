@@ -130,7 +130,7 @@ public class FormulaTest {
 	  //Variable
 	  assertEquals (x1.simplify(),x1);
   }
-  
+
   @Test
   public void testSynt() {
 	  assertTrue (t.syntEqual(t));
@@ -150,5 +150,41 @@ public class FormulaTest {
 	  assertTrue (x1.syntEqual(x1));
 	  assertFalse (x1.syntEqual(x2));
   }
+  
+
+  @Test
+  public void test24() {
+	  assertTrue(t.isAtomicFormula());
+	  assertTrue(f.isAtomicFormula());
+	  assertFalse(new Not(t).isAtomicFormula());
+	  assertFalse(nnf.isAtomicFormula());
+	  assertTrue(t.isLiteral());
+	  assertTrue(f.isLiteral());
+	  assertTrue(new Not(t).isLiteral());
+	  assertFalse(dnf.isLiteral());
+	  assertTrue(t.isClause());
+	  assertTrue(f.isClause());
+	  assertTrue(new Not(t).isClause());
+	  assertFalse(dnf.isClause());
+	  assertTrue(new Or(x1, new Or(x2,x3)).isClause());
+	  assertTrue(t.isMinterm());
+	  assertTrue(f.isMinterm());
+	  assertTrue(new Not(t).isMinterm());
+	  assertFalse(dnf.isMinterm());
+	  assertTrue(new And(x1,new And(x2,new And(x3,x4))).isMinterm());
+  }
+  
+  @Test
+  public void test25() {
+	assertTrue(dnf.isDNF());
+	assertTrue(cnf.isCNF());
+	assertTrue(nnf.isNNF());
+	assertFalse(nonCnf1.isCNF());
+	assertFalse(nonCnf2.isCNF());
+	assertFalse(nonDnf1.isDNF());
+	assertFalse(nonDnf2.isDNF());
+	assertFalse(new Not(new Not(t)).isNNF());
+  }
+  
   
 }

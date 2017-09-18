@@ -117,7 +117,16 @@ public abstract class Formula {
    * @return the formula with De Morgan applied
    */
   public static Formula applyDeMorgan(final Not f) throws IllegalArgumentException {
-    throw new ToBeImplementedException();
+	  Formula op = f.getOperand();
+	  if (op instanceof And) {
+		  And a = (And) op;
+		  return new Or(new Not(a.getLeft()),new Not(a.getRight()));
+	  } 
+	  if (op instanceof And) {
+		  Or o = (Or) op;
+		  return new And(new Not(o.getLeft()),new Not(o.getRight()));
+	  } 
+    throw new IllegalArgumentException();
   }
 
   @Override
