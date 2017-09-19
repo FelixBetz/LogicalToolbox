@@ -123,7 +123,10 @@ public final class Not extends Formula {
 
 	@Override
 	public Formula dnf() {
-		throw new ToBeImplementedException();
+		if (this.isNNF()) {
+			return this;
+		} 
+		return this.nnf().dnf();
 	}
 
 	@Override

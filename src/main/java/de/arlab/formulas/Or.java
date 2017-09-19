@@ -114,7 +114,11 @@ public final class Or extends BinaryFormula {
 
 	@Override
 	public Formula dnf() {
-		throw new ToBeImplementedException();
+		if (this.isNNF()) {
+			return new Or(left.nnf(), right.nnf()).simplify();
+		} else {
+			return this.nnf().dnf();
+		}
 	}
 
 	@Override
