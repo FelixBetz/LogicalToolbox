@@ -64,7 +64,27 @@ public class DPLLSolver extends Solver {
 	 *         {@code false}
 	 */
 	private boolean dpll(final List<Clause> clauseSet) {
-		throw new ToBeImplementedException();
+		Literal lit = containsUnitClause(clauseSet);
+		while (lit!=null) {
+			unitSubsumption(clauseSet, lit);
+			unitResolution(clauseSet, lit.negate());
+			lit = containsUnitClause(clauseSet);
+		}
+		if (containsEmptyClause(clauseSet)) return false;
+		if (clauseSet.isEmpty()) return true;
+		Literal nextChoice = heuristic.chooseLiteral(clauseSet);
+		if (dpll(clauseSet.add(nextChoice))) 
+			return true;
+		clauseSet.add(new Clause(nextChoice));
+		if(dpll(clauseSet)) 
+			return true;
+		clauseSet.remove(new Clause(nextChoice));
+		clauseSet.add(new Clause(nextChoice.negate()));
+		if (dpll(clauseSet)) 
+			return true;
+		
+		return false;
+		
 	}
 
 	/**
@@ -104,6 +124,7 @@ public class DPLLSolver extends Solver {
 				it.remove();
 			}
 		}
+		
 	}
 
 	/**
