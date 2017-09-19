@@ -36,67 +36,71 @@ public final class Variable extends Formula implements Comparable<Variable> {
 
   @Override
   public boolean syntEqual(final Formula other) {
-    throw new ToBeImplementedException();
+    return (other instanceof Variable) && (name.equals(((Variable) other).getName()));
   }
 
   @Override
   public Formula simplify() {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override
   public Formula substitute(final Variable var, final Formula formula) {
-    throw new ToBeImplementedException();
+    if (this.equals(var)) {
+    	return formula;
+    } else {
+    	return this;
+    }
   }
 
   @Override
   public boolean isAtomicFormula() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isLiteral() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isClause() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isMinterm() {
-    throw new ToBeImplementedException();
+    return true;
   }
 
   @Override
   public boolean isNNF() {
-    throw new ToBeImplementedException();
+	    return true;
   }
 
   @Override
   public boolean isCNF() {
-    throw new ToBeImplementedException();
+	    return true;
   }
 
   @Override
   public boolean isDNF() {
-    throw new ToBeImplementedException();
+	    return true;
   }
 
   @Override
   public Formula nnf() {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override
   public Formula cnf() {
-    throw new ToBeImplementedException();
+	    return this;
   }
 
   @Override
   public Formula dnf() {
-    throw new ToBeImplementedException();
+    return this;
   }
 
   @Override
