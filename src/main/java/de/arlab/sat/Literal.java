@@ -20,6 +20,10 @@ public class Literal {
     this.phase = phase;
   }
 
+  public Literal (final Variable var) {
+	  this.var = var;
+	  this.phase = true;
+  }
   /**
    * Returns the variable of this literal.
    * @return the variable of this literal

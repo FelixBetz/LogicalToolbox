@@ -3,8 +3,13 @@ package de.arlab.formulas;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.arlab.sat.Clause;
+import de.arlab.sat.Literal;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -31,9 +36,17 @@ public class FormulaTest {
 	private Formula t = Formula.VERUM;
 	private Formula f = Formula.FALSUM;
 
-	private Variable v1 = new Variable("v1");
-	private Variable v2 = new Variable("v2");
-	private Variable v3 = new Variable("v3");
+	private static Variable v1 = new Variable("v1");
+	private static Variable v2 = new Variable("v2");
+	private static Variable v3 = new Variable("v3");
+
+	private static Literal lit1 = new Literal(v1, true);
+	private static Literal lit2 = new Literal(v2, true);
+	private static Literal lit3 = new Literal(v3, true);
+	private static Literal notlit1 = new Literal(v1, false);
+	private static Clause clause1 = new Clause();
+	private static Clause clause2 = new Clause();
+	private static Clause clause3 = new Clause(lit2);
 
 	@BeforeClass
 	public static void initialize() {
@@ -236,5 +249,61 @@ public class FormulaTest {
 		
 
 	}
+	
+	@Test
+	public void testClause() {
+		clause1.addLiteral(lit1);
+		clause3.unionWith(clause1);
+		assertTrue(clause1.isUnit());
+		assertFalse(clause2.isUnit());
+		assertFalse(clause1.isEmpty());
+		assertTrue(clause2.isEmpty());
+		assertTrue(clause3.contains(lit1));
+		clause3.removeLiteral(lit2);
+		assertFalse(clause3.contains(lit2));
+	}
 
+	@Test
+	public void testFormula2Clause() {
+		Set<Clause> testSet = new HashSet<>();
+		assertEquals(Clause.formula2Clauses(t), testSet);
+		testSet.add(new Clause());
+		assertEquals(Clause.formula2Clauses(f), testSet);
+		testSet.clear();
+		testSet.add(clause1);
+		assertEquals(Clause.formula2Clauses(v1), testSet);
+		testSet.clear();
+		testSet.add(new Clause(notlit1));
+		assertEquals(Clause.formula2Clauses(new Not(v1)), testSet);
+		testSet.clear();
+		Clause c1 = new Clause();
+		Clause c2 = new Clause();
+		c1.addLiteral(new Literal(F.var1).negate());
+		c1.addLiteral(new Literal(F.var2));
+		c2.addLiteral(new Literal(F.var1));
+		c2.addLiteral(new Literal(F.var2));
+		c2.addLiteral(new Literal(F.var3));
+		testSet.add(c1);
+		testSet.add(c2);
+		assertEquals(Clause.formula2Clauses(cnf),testSet);
+	}
+
+	@Test
+	public void testClause2Formula() {
+		Clause c1 = new Clause();
+		Clause c2 = new Clause();
+		assertEquals(Clause.clause2Formula(c1), f);
+		c1.addLiteral(new Literal(F.var1).negate());
+		c1.addLiteral(new Literal(F.var2));
+		c2.addLiteral(new Literal(F.var1));
+		c2.addLiteral(new Literal(F.var2));
+		c2.addLiteral(new Literal(F.var3));
+		Set<Clause> testSet = new HashSet<>();
+		testSet.add(c1);
+		testSet.add(c2);
+		assertEquals(Clause.clause2Formula(c1), new Or(F.var2,new Not( F.var1)));
+		assertEquals(Clause.clause2Formula(c2), new Or(F.var3, new Or(F.var2, F.var1)));
+		assertEquals(Clause.clauses2Formula(testSet),
+				new And(new Or(F.var3, new Or(F.var2, F.var1)),new Or(F.var2,new Not( F.var1))));
+	}
 }
