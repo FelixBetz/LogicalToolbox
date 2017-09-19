@@ -53,7 +53,7 @@ public class DPLLSolver extends Solver {
 
 	@Override
 	public Map<Variable, Boolean> getModel(final Formula formula) {
-		throw new ToBeImplementedException();
+		return getModel(Clause.formula2Clauses(formula));
 	}
 
 	/**
@@ -67,21 +67,23 @@ public class DPLLSolver extends Solver {
 	 */
 	private boolean dpll(final List<Clause> clauseSet) {
 		Literal lit = containsUnitClause(clauseSet);
-		while (lit!=null) {
+		while (lit != null) {
 			unitSubsumption(clauseSet, lit);
 			unitResolution(clauseSet, lit.negate());
 			lit = containsUnitClause(clauseSet);
 		}
-		if (containsEmptyClause(clauseSet)) return false;
-		if (clauseSet.isEmpty()) return true;
+		if (containsEmptyClause(clauseSet))
+			return false;
+		if (clauseSet.isEmpty())
+			return true;
 		Literal nextChoice = heuristic.chooseLiteral(clauseSet);
-		if (dpll(unionWithUnitClause(clauseSet, nextChoice))) 
+		if (dpll(unionWithUnitClause(clauseSet, nextChoice)))
 			return true;
-		if(dpll(unionWithUnitClause(clauseSet, nextChoice.negate()))) 
+		if (dpll(unionWithUnitClause(clauseSet, nextChoice.negate())))
 			return true;
-		
+
 		return false;
-		
+
 	}
 
 	/**
@@ -121,7 +123,7 @@ public class DPLLSolver extends Solver {
 				it.remove();
 			}
 		}
-		
+
 	}
 
 	/**
