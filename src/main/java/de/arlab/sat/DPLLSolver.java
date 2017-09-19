@@ -33,12 +33,14 @@ public class DPLLSolver extends Solver {
 
 	@Override
 	public boolean isSAT(final Set<Clause> clauseSet) {
-		throw new ToBeImplementedException();
+		List<Clause> clauseList = new ArrayList<>();
+		clauseList.addAll(clauseSet);
+		return dpll(clauseList);
 	}
 
 	@Override
 	public boolean isSAT(final Formula formula) {
-		throw new ToBeImplementedException();
+		return isSAT(Clause.formula2Clauses(formula));
 	}
 
 	@Override
@@ -73,14 +75,9 @@ public class DPLLSolver extends Solver {
 		if (containsEmptyClause(clauseSet)) return false;
 		if (clauseSet.isEmpty()) return true;
 		Literal nextChoice = heuristic.chooseLiteral(clauseSet);
-		if (dpll(clauseSet.add(nextChoice))) 
+		if (dpll(unionWithUnitClause(clauseSet, nextChoice))) 
 			return true;
-		clauseSet.add(new Clause(nextChoice));
-		if(dpll(clauseSet)) 
-			return true;
-		clauseSet.remove(new Clause(nextChoice));
-		clauseSet.add(new Clause(nextChoice.negate()));
-		if (dpll(clauseSet)) 
+		if(dpll(unionWithUnitClause(clauseSet, nextChoice.negate()))) 
 			return true;
 		
 		return false;

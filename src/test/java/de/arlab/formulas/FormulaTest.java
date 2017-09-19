@@ -4,7 +4,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.arlab.sat.Clause;
+import de.arlab.sat.DPLLSolver;
 import de.arlab.sat.Literal;
+import de.arlab.sat.heuristics.TrivialHeuristic;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +49,7 @@ public class FormulaTest {
 	private static Clause clause1 = new Clause();
 	private static Clause clause2 = new Clause();
 	private static Clause clause3 = new Clause(lit2);
+	private static DPLLSolver solver = new DPLLSolver(new TrivialHeuristic());
 
 	@BeforeClass
 	public static void initialize() {
@@ -305,5 +308,12 @@ public class FormulaTest {
 		assertEquals(Clause.clause2Formula(c2), new Or(F.var3, new Or(F.var2, F.var1)));
 		assertEquals(Clause.clauses2Formula(testSet),
 				new And(new Or(F.var3, new Or(F.var2, F.var1)), new Or(F.var2, new Not(F.var1))));
+		assertTrue(solver.isSAT(testSet));
+	}
+	
+	@Test
+	public void testDPLL() {
+		assertFalse(solver.isContradiction(cnf));
+		assertTrue(solver.isEquivalent(dnf,	dnf));
 	}
 }

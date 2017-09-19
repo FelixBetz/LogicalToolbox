@@ -92,11 +92,12 @@ public final class And extends BinaryFormula {
 
 	@Override
 	public Formula nnf() {
-		if (this.isNNF()) {
+		return new And(left.nnf(), right.nnf()).simplify();
+/*		if (this.isNNF()) {
 			return new And(left.nnf(), right.nnf()).simplify();
 		} else {
-			return this.nnf().cnf();
-		}
+			return this.nnf();
+		}*/
 	}
 
 	@Override
