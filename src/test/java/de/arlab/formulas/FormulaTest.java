@@ -206,7 +206,7 @@ public class FormulaTest {
 
 	@Test
 	public void testNNF() {
-		
+
 		assertEquals(t.nnf(), t);
 		assertEquals(f.nnf(), f);
 		assertEquals(new Not(t).nnf(), f);
@@ -219,37 +219,37 @@ public class FormulaTest {
 		assertEquals(nnf.nnf(), nnf);
 		assertEquals(new Not(nnf).nnf(), new Or(F.var3, new And(new Not(F.var1), new Not(F.var2))));
 	}
-	
+
 	@Test
 	public void testCNF() {
-		assertEquals(cnf.cnf(),cnf);
-		assertEquals(t.cnf(),t);
-		assertEquals(v1.cnf(),v1);
-		assertEquals(new And(v1,v2).cnf(), new And(v1,v2));
-		assertEquals(new Or(v1,v2).cnf(), new Or(v1,v2));
-		assertEquals(new Or(v1,new And(v2,v3)).cnf(), new And(new Or(v1,v2),new Or(v1,v3)));
-		assertEquals(new Or(new And(v1,v2),v3).cnf(), new And(new Or(v1,v3),new Or(v2,v3)));
+		assertEquals(cnf.cnf(), cnf);
+		assertEquals(t.cnf(), t);
+		assertEquals(v1.cnf(), v1);
+		assertEquals(new And(v1, v2).cnf(), new And(v1, v2));
+		assertEquals(new Or(v1, v2).cnf(), new Or(v1, v2));
+		assertEquals(new Or(v1, new And(v2, v3)).cnf(), new And(new Or(v1, v2), new Or(v1, v3)));
+		assertEquals(new Or(new And(v1, v2), v3).cnf(), new And(new Or(v1, v3), new Or(v2, v3)));
 		assertEquals(new Not(v1).cnf(), new Not(v1));
-		assertEquals(new Not(new Or(v1, v2)).cnf(), new And(new Not(v1),new Not(v2)));
+		assertEquals(new Not(new Or(v1, v2)).cnf(), new And(new Not(v1), new Not(v2)));
 	}
-	
+
 	@Test
 	public void testDNF() {
-		assertEquals(dnf.dnf(),dnf);
-		assertEquals(t.dnf(),t);
-		assertEquals(v1.dnf(),v1);
-		assertEquals(new And(v1,v2).dnf(), new And(v1,v2));
-		assertEquals(new Or(v1,v2).dnf(), new Or(v1,v2));
-		assertEquals(new Or(v1,new And(v2,v3)).dnf(), new Or(v1, new And(v2,v3)));
-		assertEquals(new And(v1,new Or(v2,v3)).dnf(), new Or(new And(v1,v2),new And(v1,v3)));
-		assertEquals(new And(new Or(v1,v2),v3).dnf(), new Or(new And(v1,v3),new And(v2,v3)));
+		assertEquals(dnf.dnf(), dnf);
+		assertEquals(t.dnf(), t);
+		assertEquals(v1.dnf(), v1);
+		assertEquals(new And(v1, v2).dnf(), new And(v1, v2));
+		assertEquals(new Or(v1, v2).dnf(), new Or(v1, v2));
+		assertEquals(new Or(v1, new And(v2, v3)).dnf(), new Or(v1, new And(v2, v3)));
+		assertEquals(new And(v1, new Or(v2, v3)).dnf(), new Or(new And(v1, v2), new And(v1, v3)));
+		assertEquals(new And(new Or(v1, v2), v3).dnf(), new Or(new And(v1, v3), new And(v2, v3)));
 		assertEquals(new Not(v1).dnf(), new Not(v1));
-		assertEquals(new Not(new And(v1, v2)).dnf(), new Or(new Not(v1),new Not(v2)));
-		assertEquals(new And(new Not(v1), new Or(v1,v2)).dnf(),new Or(new And(new Not(v1),v1), new And(new Not(v1),v2)));
-		
+		assertEquals(new Not(new And(v1, v2)).dnf(), new Or(new Not(v1), new Not(v2)));
+		assertEquals(new And(new Not(v1), new Or(v1, v2)).dnf(),
+				new Or(new And(new Not(v1), v1), new And(new Not(v1), v2)));
 
 	}
-	
+
 	@Test
 	public void testClause() {
 		clause1.addLiteral(lit1);
@@ -285,7 +285,7 @@ public class FormulaTest {
 		c2.addLiteral(new Literal(F.var3));
 		testSet.add(c1);
 		testSet.add(c2);
-		assertEquals(Clause.formula2Clauses(cnf),testSet);
+		assertEquals(Clause.formula2Clauses(cnf), testSet);
 	}
 
 	@Test
@@ -301,9 +301,9 @@ public class FormulaTest {
 		Set<Clause> testSet = new HashSet<>();
 		testSet.add(c1);
 		testSet.add(c2);
-		assertEquals(Clause.clause2Formula(c1), new Or(F.var2,new Not( F.var1)));
+		assertEquals(Clause.clause2Formula(c1), new Or(F.var2, new Not(F.var1)));
 		assertEquals(Clause.clause2Formula(c2), new Or(F.var3, new Or(F.var2, F.var1)));
 		assertEquals(Clause.clauses2Formula(testSet),
-				new And(new Or(F.var3, new Or(F.var2, F.var1)),new Or(F.var2,new Not( F.var1))));
+				new And(new Or(F.var3, new Or(F.var2, F.var1)), new Or(F.var2, new Not(F.var1))));
 	}
 }
