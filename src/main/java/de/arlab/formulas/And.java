@@ -106,7 +106,18 @@ public final class And extends BinaryFormula {
 
 	@Override
 	public Formula dnf() {
-		throw new ToBeImplementedException();
+		if (this.isNNF()) {
+			if (this.isDNF()) {
+				return this;
+			}
+			if (right instanceof Or) {
+				Or a = (Or) right;
+				return new Or(new And(left, a.getLeft()).dnf(), new And(left, a.getRight()).dnf());
+			}
+			Or a = (Or) left;
+			return new Or(new And(a.getLeft(), right).dnf(), new And(a.getRight(), right).dnf());
+		}
+		return this.nnf().dnf();
 	}
 
 	@Override
