@@ -71,6 +71,13 @@ public class Clause {
 		return literals;
 	}
 
+	public Literal getFirstLiteral() {
+		if(this.literals.isEmpty()) {
+			return null;
+		}
+	Iterator<Literal> it = literals.iterator();
+	return it.next();
+	}
 	/**
 	 * Adds a literal to this clause.
 	 * 

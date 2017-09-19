@@ -24,6 +24,8 @@ public class Literal {
 	  this.var = var;
 	  this.phase = true;
   }
+  
+  
   /**
    * Returns the variable of this literal.
    * @return the variable of this literal

@@ -13,6 +13,7 @@ public class TrivialHeuristic implements ChoiceHeuristic {
 
   @Override
   public Literal chooseLiteral(final List<Clause> clauseSet) {
-    throw new ToBeImplementedException();
+	  Clause c = clauseSet.get(0);
+    return c.getFirstLiteral();
   }
 }
