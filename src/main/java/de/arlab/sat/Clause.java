@@ -12,6 +12,7 @@ import de.arlab.util.ToBeImplementedException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -70,7 +71,7 @@ public class Clause {
    * @param lit the literal to add
    */
   public void addLiteral(final Literal lit) {
-    throw new ToBeImplementedException();
+    literals.add(lit);
   }
 
   /**
@@ -78,7 +79,7 @@ public class Clause {
    * @param lit the literal to remove
    */
   public void removeLiteral(final Literal lit) {
-    throw new ToBeImplementedException();
+    literals.remove(lit);
   }
 
   /**
@@ -86,7 +87,7 @@ public class Clause {
    * @return {@code true} if this clause is unit, otherwise {@code false}
    */
   public boolean isUnit() {
-    throw new ToBeImplementedException();
+  return literals.size() == 1;
   }
 
   /**
@@ -94,7 +95,7 @@ public class Clause {
    * @return {@code true} if this clause is empty, otherwise {@code false}
    */
   public boolean isEmpty() {
-    throw new ToBeImplementedException();
+    return literals.isEmpty();
   }
 
   /**
@@ -114,7 +115,7 @@ public class Clause {
    * @return {@code true} if this clause contains lit, otherwise {@code false}
    */
   public boolean contains(final Literal lit) {
-    throw new ToBeImplementedException();
+    return literals.contains(lit);
   }
 
   /**
@@ -122,7 +123,7 @@ public class Clause {
    * @param c clause to union with
    */
   public void unionWith(final Clause c) {
-    throw new ToBeImplementedException();
+    literals.addAll(c.getLiterals());
   }
 
   @Override
