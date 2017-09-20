@@ -313,6 +313,14 @@ public class FormulaTest {
 	
 	@Test
 	public void testDPLL() {
+		Map<Variable, Boolean> m = new HashMap<>();
+		assertEquals(solver.getModel(t), m);
+		assertEquals(solver.getModel(f), null);
+		m.put(F.var1, false);
+		m.put(F.var2, true);
+		assertEquals(solver.getModel(cnf), m);
+		Map<Variable, Boolean> m2 = new HashMap<>();
+		assertEquals(solver.getModel(t), m2);
 		assertFalse(solver.isContradiction(cnf));
 		assertTrue(solver.isEquivalent(dnf,	dnf));
 	}

@@ -33,6 +33,7 @@ public class DPLLSolver extends Solver {
 
 	@Override
 	public boolean isSAT(final Set<Clause> clauseSet) {
+		this.model.clear();
 		List<Clause> clauseList = new ArrayList<>();
 		clauseList.addAll(clauseSet);
 		return dpll(clauseList);
@@ -68,6 +69,7 @@ public class DPLLSolver extends Solver {
 	private boolean dpll(final List<Clause> clauseSet) {
 		Literal lit = containsUnitClause(clauseSet);
 		while (lit != null) {
+			this.model.put(lit.getVar(), lit.getPhase());
 			unitSubsumption(clauseSet, lit);
 			unitResolution(clauseSet, lit.negate());
 			lit = containsUnitClause(clauseSet);
@@ -85,7 +87,6 @@ public class DPLLSolver extends Solver {
 		return false;
 
 	}
-
 	/**
 	 * Returns the literal of a unit clause, if the clause set contains a unit
 	 * clause. Otherwise {@code null} will be returned.
