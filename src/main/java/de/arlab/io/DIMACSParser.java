@@ -77,33 +77,30 @@ public final class DIMACSParser {
 	 * @throws IOException
 	 *             if there was a problem with the file
 	 */
+
 	public Set<Clause> parse(final String file) throws IOException {
 		if (parsed)
 			throw new IllegalStateException("Please create a new DIMACSParser for each file you want to parse.");
 		parsed = true;
-		Scanner scan = new Scanner(new File(file));
-		while (scan.hasNextLine()) {
-			String[] line = scan.nextLine().split("\\s");
-			if (!line[0].equals("c") && !line[0].equals("p")) {
-				Clause c = line2clause(line);
-				clauses.add(c);
+		try (Scanner scan = new Scanner(new File(file))) {
+			String line;
+			while (scan.hasNextLine() && scan.next().equals("c")) {
+				line = scan.nextLine();
+			}
+			line = scan.nextLine();
+			Clause c = new Clause();
+			while (scan.hasNextInt()) {
+				Integer i = scan.nextInt();
+				if (i == 0) {
+					clauses.add(c);
+					c = new Clause();
+				} else if (i > 0) {
+					c.addLiteral(new Literal(new Variable(Integer.toString(i))));
+				} else {
+					c.addLiteral(new Literal(new Variable(Integer.toString(Math.abs(i)))).negate());
+				}
 			}
 		}
 		return clauses;
-	}
-
-	private Clause line2clause(String[] line) {
-		Clause c = new Clause();
-		Boolean phase = true;
-		for (String string : line) {
-			if (!string.equals("0")) {
-				if (string.substring(0, 1).equals("-")) {
-					phase = false;
-					string = string.substring(1);
-				}
-				c.addLiteral(new Literal(new Variable(string), phase));
-			}
-		}
-		return c;
 	}
 }
