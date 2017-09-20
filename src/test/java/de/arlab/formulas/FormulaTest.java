@@ -3,11 +3,13 @@ package de.arlab.formulas;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.arlab.io.DIMACSParser;
 import de.arlab.sat.Clause;
 import de.arlab.sat.DPLLSolver;
 import de.arlab.sat.Literal;
 import de.arlab.sat.heuristics.TrivialHeuristic;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -310,7 +312,7 @@ public class FormulaTest {
 				new And(new Or(F.var3, new Or(F.var2, F.var1)), new Or(F.var2, new Not(F.var1))));
 		assertTrue(solver.isSAT(testSet));
 	}
-	
+
 	@Test
 	public void testDPLL() {
 		Map<Variable, Boolean> m = new HashMap<>();
@@ -322,6 +324,17 @@ public class FormulaTest {
 		Map<Variable, Boolean> m2 = new HashMap<>();
 		assertEquals(solver.getModel(t), m2);
 		assertFalse(solver.isContradiction(cnf));
-		assertTrue(solver.isEquivalent(dnf,	dnf));
+		assertTrue(solver.isEquivalent(dnf, dnf));
+	}
+
+	@Test
+	public void testDIMACSL() throws IOException {
+		DIMACSParser dm1 = new DIMACSParser();
+		DIMACSParser dm2 = new DIMACSParser();
+		DIMACSParser dm3 = new DIMACSParser();
+		//assertTrue(solver.isSAT(dm.parse("aim-50-1_6-yes1-1.cnf")));
+		assertTrue(solver.isSAT(dm1.parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-1.cnf")));
+		assertFalse(solver.isSAT(dm2.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+		assertTrue(solver.isSAT(dm3.parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
 	}
 }
