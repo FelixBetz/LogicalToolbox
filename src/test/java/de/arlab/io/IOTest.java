@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import de.arlab.io.DIMACSParser;
 import de.arlab.sat.*;
+import de.arlab.sat.heuristics.LeastCommonLiteralHeuristic;
+import de.arlab.sat.heuristics.LeastCommonVariableHeuristic;
 import de.arlab.sat.heuristics.TrivialHeuristic;
 import de.arlab.formulas.*;
 
@@ -53,6 +55,8 @@ public class IOTest {
 	private static Clause clause2 = new Clause();
 	private static Clause clause3 = new Clause(lit2);
 	private static DPLLSolver solver = new DPLLSolver(new TrivialHeuristic());
+	private static DPLLSolver lcvsolver = new DPLLSolver(new LeastCommonVariableHeuristic());
+	private static DPLLSolver lclsolver = new DPLLSolver(new LeastCommonLiteralHeuristic());
 	private static DIMACSParser dm1 = new DIMACSParser();
 	private static DIMACSParser dm2 = new DIMACSParser();
 	private static DIMACSParser dm3 = new DIMACSParser();
@@ -93,8 +97,8 @@ public class IOTest {
 				new Clause(new Literal(new Variable("5")), new Literal(new Variable("3")),new Literal(new Variable("4"),false)));
 		assertEquals(dm1.parse(file), c);
 		assertFalse(solver.isSAT(dm2.parse("src/test/resources/dimacs/no/aim-50-1_6-no-1.cnf")));
-		assertFalse(solver.isSAT(dm3.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
-		assertFalse(solver.isSAT(dm4.parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
+		assertFalse(lcvsolver.isSAT(dm3.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+		assertFalse(lclsolver.isSAT(dm4.parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
 
 	}
 }
