@@ -12,22 +12,11 @@ import java.util.Map;
 /**
  * A trivial heuristics, which chooses the next available variable.
  */
-public class LeastCommonVariableHeuristic implements ChoiceHeuristic {
+public class LeastCommonVariableHeuristic extends VariableHeuristic {
 
 	@Override
 	public Literal chooseLiteral(List<Clause> clauseSet) {
-		Map<Variable, Integer> map = new HashMap<>();
-		// Store the variables and the number of its occurence in a map
-		for (Clause clause : clauseSet) {
-			for (Literal literal : clause.getLiterals()) {
-				Variable var = literal.getVar();
-				if (map.containsKey(var)) {
-					map.put(var, map.get(var) + 1);
-				} else {
-					map.put(var, 1);
-				}
-			}
-		}
+		Map<Variable, Integer> map = variableMap(clauseSet);
 		// Iterate over the map to find the entry with the lowest occurence
 		Map.Entry<Variable, Integer> minEntry = null;
 		for (Map.Entry<Variable, Integer> entry : map.entrySet()) {

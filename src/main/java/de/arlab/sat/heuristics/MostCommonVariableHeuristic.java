@@ -12,21 +12,11 @@ import java.util.Map;
 /**
  * A trivial heuristics, which chooses the next available variable.
  */
-public class MostCommonVariableHeuristic implements ChoiceHeuristic {
+public class MostCommonVariableHeuristic extends VariableHeuristic {
 
 	@Override
 	public Literal chooseLiteral(List<Clause> clauseSet) {
-		Map<Variable, Integer> map = new HashMap<>();
-		for (Clause clause : clauseSet) {
-			for (Literal literal : clause.getLiterals()) {
-				Variable var = literal.getVar();
-				if (map.containsKey(var)) {
-					map.put(var, map.get(var) + 1);
-				} else {
-					map.put(var, 1);
-				}
-			}
-		}
+		Map<Variable, Integer> map = variableMap(clauseSet);
 		Map.Entry<Variable, Integer> maxEntry = null;
 		for (Map.Entry<Variable, Integer> entry : map.entrySet()) {
 			if (maxEntry == null || maxEntry.getValue() > entry.getValue())

@@ -11,20 +11,11 @@ import java.util.Map;
 /**
  * A trivial heuristics, which chooses the next available variable.
  */
-public class LeastCommonLiteralHeuristic implements ChoiceHeuristic {
+public class LeastCommonLiteralHeuristic extends LiteralHeuristic {
 
 	@Override
 	public Literal chooseLiteral(List<Clause> clauseSet) {
-		Map<Literal, Integer> map = new HashMap<>();
-		for (Clause clause : clauseSet) {
-			for (Literal literal : clause.getLiterals()) {
-				if (map.containsKey(literal)) {
-					map.put(literal, map.get(literal) + 1);
-				} else {
-					map.put(literal, 1);
-				}
-			}
-		}
+		Map<Literal, Integer> map = literalMap(clauseSet);
 		Map.Entry<Literal, Integer> minEntry = null;
 		for (Map.Entry<Literal, Integer> entry : map.entrySet()) {
 			if (minEntry == null || minEntry.getValue() > entry.getValue())

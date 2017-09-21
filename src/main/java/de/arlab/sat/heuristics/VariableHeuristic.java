@@ -1,5 +1,6 @@
 package de.arlab.sat.heuristics;
 
+import de.arlab.formulas.Variable;
 import de.arlab.sat.Clause;
 import de.arlab.sat.Literal;
 import de.arlab.util.ToBeImplementedException;
@@ -11,16 +12,17 @@ import java.util.Map;
 /**
  * A trivial heuristics, which chooses the next available variable.
  */
-public abstract class LiteralHeuristic implements ChoiceHeuristic {
+public abstract class VariableHeuristic implements ChoiceHeuristic {
 
-	public Map<Literal, Integer> literalMap (List<Clause> clauseSet) {
-		Map<Literal, Integer> map = new HashMap<>();
+	public Map<Variable, Integer> variableMap (List<Clause> clauseSet) {
+		Map<Variable, Integer> map = new HashMap<>();
 		for (Clause clause : clauseSet) {
 			for (Literal literal : clause.getLiterals()) {
-				if (map.containsKey(literal)) {
-					map.put(literal, map.get(literal) + 1);
+				Variable var = literal.getVar();
+				if (map.containsKey(var)) {
+					map.put(var, map.get(var) + 1);
 				} else {
-					map.put(literal, 1);
+					map.put(var, 1);
 				}
 			}
 		}
