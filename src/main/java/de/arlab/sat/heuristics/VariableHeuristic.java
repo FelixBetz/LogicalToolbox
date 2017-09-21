@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public abstract class VariableHeuristic implements ChoiceHeuristic {
 
-	public Map<Variable, Integer> variableMap (List<Clause> clauseSet) {
+	public static Map<Variable, Integer> variableMap (List<Clause> clauseSet) {
 		Map<Variable, Integer> map = new HashMap<>();
 		for (Clause clause : clauseSet) {
 			for (Literal literal : clause.getLiterals()) {

@@ -35,7 +35,7 @@ public class DPLLSolver extends Solver {
 	public boolean isSAT(final Set<Clause> clauseSet) {
 		this.model.clear();
 		List<Clause> clauseList = new ArrayList<>();
-		clauseList.addAll(clauseSet);
+		clauseList.addAll(Clause.copyClauseSet(clauseSet));
 		return dpll(clauseList);
 	}
 
@@ -70,7 +70,9 @@ public class DPLLSolver extends Solver {
 		Literal lit = containsUnitClause(clauseSet);
 		while (lit != null) {
 			this.model.put(lit.getVar(), lit.getPhase());
+			//System.out.println(lit); System.out.println(clauseSet);
 			unitSubsumption(clauseSet, lit);
+			//System.out.println(clauseSet);
 			unitResolution(clauseSet, lit.negate());
 			lit = containsUnitClause(clauseSet);
 		}
@@ -79,8 +81,9 @@ public class DPLLSolver extends Solver {
 		if (clauseSet.isEmpty())
 			return true;
 		Literal nextChoice = heuristic.chooseLiteral(clauseSet);
-		if (dpll(unionWithUnitClause(clauseSet, nextChoice)))
+		if (dpll(unionWithUnitClause(Clause.copyClauseSet(clauseSet), nextChoice)))
 			return true;
+
 		if (dpll(unionWithUnitClause(clauseSet, nextChoice.negate())))
 			return true;
 
@@ -124,7 +127,6 @@ public class DPLLSolver extends Solver {
 				it.remove();
 			}
 		}
-
 	}
 
 	/**

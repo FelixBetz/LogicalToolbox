@@ -9,10 +9,12 @@ import de.arlab.formulas.Variable;
 import de.arlab.formulas.Verum;
 import de.arlab.util.ToBeImplementedException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,6 +38,13 @@ public class Clause {
 	 * @param lit
 	 *            the single literal in this clause
 	 */
+	public Clause (final Clause other) {
+		literals = new HashSet<>();
+		for (Literal literal : other.getLiterals()) {
+			literals.add(new Literal(literal));
+		}
+	}
+	
 	public Clause(final Literal lit) {
 		literals = new HashSet<>();
 		literals.add(lit);
@@ -269,7 +278,21 @@ public class Clause {
 			vars.addAll(vars(c));
 		return vars;
 	}
-
+	
+	public static Set<Clause> copyClauseSet(final Set<Clause> clauseSet) {
+		Set<Clause> clauseList = new HashSet<>();
+		for (Clause clause : clauseSet) {
+			clauseList.add(new Clause(clause));
+		}
+		return clauseList;
+	}
+	public static List<Clause> copyClauseSet(final List<Clause> clauseSet) {
+		List<Clause> clauseList = new ArrayList<>();
+		for (Clause clause : clauseSet) {
+			clauseList.add(new Clause(clause));
+		}
+		return clauseList;
+	}
 	private static Set<Variable> vars(final Clause c) {
 		final Set<Variable> vars = new HashSet<Variable>();
 		for (Literal l : c.getLiterals())

@@ -21,7 +21,11 @@ public class Literal {
 		this.var = var;
 		this.phase = phase;
 	}
-
+	
+	public Literal(final Literal other) {
+		this.var = other.getVar();
+		this.phase = other.getPhase();
+	}
 	/**
 	 * Alternative constructor for a literal with a positive phase.
 	 * 
