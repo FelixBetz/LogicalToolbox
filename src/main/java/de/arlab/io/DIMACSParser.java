@@ -81,26 +81,33 @@ public final class DIMACSParser {
 	public Set<Clause> parse(final String file) throws IOException {
 		if (parsed)
 			throw new IllegalStateException("Please create a new DIMACSParser for each file you want to parse.");
+		parsed = true;
 		try (Scanner scan = new Scanner(new File(file))) {
 			String line;
 			// Ignore comment lines
 			while (scan.hasNextLine() && scan.next().equals("c")) {
 				line = scan.nextLine();
 			}
-			// get rid of the problem Line
-			line = scan.nextLine();
+			// get rid of the problem Line-beginning
+			String n = scan.next();
+			// set number of variables and clauses
+			numVars = scan.nextInt();
+			numClauses = scan.nextInt();
+			//System.out.println(numVars);
+			//System.out.println(numClauses);
+			//line = scan.nextLine();
 			// Start filling clauses
 			Clause c = new Clause();
 			while (scan.hasNextInt()) {
 				Integer i = scan.nextInt();
-				if (i == 0) {
-					clauses.add(c);
+				if (i.equals(0)) {
+					this.clauses.add(c);
 					c = new Clause();
 				} else
 					c.addLiteral(new Literal(i));
 			}
 		}
-		parsed = true;
-		return clauses;
+		//System.out.println(this.clauses);
+		return this.clauses;
 	}
 }
