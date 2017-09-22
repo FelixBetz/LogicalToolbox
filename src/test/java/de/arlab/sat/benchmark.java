@@ -41,13 +41,13 @@ public class benchmark {
 	public void bench1MostCommonVariableHeuristic() throws IOException {
 		assertFalse(solver5.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 	}
-	
+
 	
 	@Test
 	public void bench2MostCommonLiteralHueristic() throws IOException {
 		assertFalse(solver4.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-01.cnf")));
 		
-		assertFalse(solver4.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf225-099.cnf")));
+		
 	}
 	@Test
 	public void bench2MostCommonVariableHeuristic() throws IOException {
