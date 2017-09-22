@@ -52,7 +52,7 @@ public final class Variable extends Formula implements Comparable<Variable> {
     	return this;
     }
   }
-
+// a variable is atomic, literal, clause, minterm, nnf, cnf and dnf
   @Override
   public boolean isAtomicFormula() {
     return true;

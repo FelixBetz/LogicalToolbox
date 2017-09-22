@@ -44,7 +44,7 @@ public final class Falsum extends Formula {
   public Formula substitute(final Variable var, final Formula formula) {
 	  return this;
   }
-
+// Falsum is atomic, literal, clause, minterm, nnf, cnf and dnf
   @Override
   public boolean isAtomicFormula() {
     return true;

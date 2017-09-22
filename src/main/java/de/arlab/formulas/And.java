@@ -56,6 +56,8 @@ public final class And extends BinaryFormula {
 		return new And(left.substitute(var, formula), right.substitute(var, formula));
 	}
 
+	// Conjunction is not atomic, not literal, no clause but a minterm. It is in
+	// nnf, cnf if lft and right are in cnf, dnf if left and right are minterms
 	@Override
 	public boolean isAtomicFormula() {
 		return false;
@@ -103,19 +105,19 @@ public final class And extends BinaryFormula {
 
 	@Override
 	public Formula dnf() {
-		if (this.isNNF()) { // only work with the formula if it is in nnf.
-			if (this.isDNF()) {
-				return this; // trivial
-			}
-			// if one or both sides contains an Or, use distributivity
-			if (right instanceof Or) {
-				Or a = (Or) right;
-				return new Or(new And(left, a.getLeft()).dnf(), new And(left, a.getRight()).dnf());
-			}
-			Or a = (Or) left;
-			return new Or(new And(a.getLeft(), right).dnf(), new And(a.getRight(), right).dnf());
+		Formula lft = left.cnf();
+		Formula rgt = right.cnf();
+		// if left or right cnf are an Or, distribute
+		if (lft instanceof Or) {
+			Or a = (Or) lft;
+			return new Or(new And(a.getLeft(), rgt).cnf(), new And(a.getRight(), rgt).cnf()).simplify();
 		}
-		return this.nnf().dnf();
+		if (rgt instanceof Or) {
+			Or a = (Or) rgt;
+			return new Or(new And(lft, a.getLeft()).cnf(), new And(lft, a.getRight()).cnf()).simplify();
+		}
+		// otherwise we have a dnf
+		return new And(lft, rgt).simplify();
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public final class Not extends Formula {
 	public Formula substitute(final Variable var, final Formula formula) {
 		return new Not(operand.substitute(var, formula));
 	}
-
+// Negation isnt atomic, is literal, clause, minterm, nnf, cnf, dnf if operand is atomic, 
 	@Override
 	public boolean isAtomicFormula() {
 		return false;
@@ -98,6 +98,7 @@ public final class Not extends Formula {
 
 	@Override
 	public Formula nnf() {
+		// Negation is allowed only in front of variables
 	   if (operand instanceof Variable) {
 		   return this;
 	   } 
@@ -107,6 +108,7 @@ public final class Not extends Formula {
 	   if (operand instanceof Verum) {
 		   return Formula.FALSUM;
 	   }
+	   // negation of negation
 	   if (operand instanceof Not) {
 		   return ((Not) operand).getOperand().nnf();
 	   }
