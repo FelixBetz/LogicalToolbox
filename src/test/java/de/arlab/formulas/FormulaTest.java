@@ -327,6 +327,7 @@ public class FormulaTest {
 		assertTrue(solver.isEquivalent(dnf, dnf));
 		assertFalse(solver.isContradiction(new Or(x1,new Not(x1))));
 		assertTrue(solver.isTautology(new Or(x1,new Not(x1))));
+		assertTrue(solver.isTautology(new Or(x1,new Not(x1))));
 	}
 
 	@Test
@@ -336,7 +337,7 @@ public class FormulaTest {
 		DIMACSParser dm3 = new DIMACSParser();
 		//assertTrue(solver.isSAT(dm.parse("aim-50-1_6-yes1-1.cnf")));
 		//assertTrue(solver.isSAT(dm1.parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-1.cnf")));
-		//assertFalse(solver.isSAT(dm2.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+		assertFalse(solver.isSAT(dm2.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 		//assertTrue(solver.isSAT(dm3.parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
 	}
 }
