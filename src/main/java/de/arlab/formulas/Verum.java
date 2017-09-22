@@ -44,7 +44,7 @@ public final class Verum extends Formula {
   public Formula substitute(final Variable var, final Formula formula) {
     return this;
   }
-
+//Verum is atomic, literal, clause, minterm, nnf, cnf and dnf
   @Override
   public boolean isAtomicFormula() {
     return true;

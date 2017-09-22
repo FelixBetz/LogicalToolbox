@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public final class Or extends BinaryFormula {
 
-
 	/**
 	 * Constructor for OR-formula.
 	 * 
@@ -50,7 +49,7 @@ public final class Or extends BinaryFormula {
 		if (newRight instanceof Falsum) {
 			return newLeft;
 		}
-		return new Or(newLeft, newRight); 
+		return new Or(newLeft, newRight);
 	}
 
 	@Override
@@ -58,6 +57,9 @@ public final class Or extends BinaryFormula {
 		return new Or(left.substitute(var, formula), right.substitute(var, formula));
 	}
 
+	// Disjunction isnt atomic, is not literal, is clause if left and right are
+	// clauses, is no minterm, is in nnf if left and right are in nnf, is in dnf if
+	// left and right are in dnf, is in cnf if left and righ are clauses
 	@Override
 	public boolean isAtomicFormula() {
 		return false;
@@ -100,29 +102,24 @@ public final class Or extends BinaryFormula {
 
 	@Override
 	public Formula cnf() {
-		if (this.isNNF()) { // if the formula is in nnf work with it
-			if (this.isCNF()) {
-				return this;
-			}
-			// if left or right contains an and, use D
-			if (right instanceof And) {
-				And a = (And) right;
-				return new And(new Or(left, a.getLeft()).cnf(), new Or(left, a.getRight()).cnf());
-			}
-			And a = (And) left;
-			return new And(new Or(a.getLeft(), right).cnf(), new Or(a.getRight(), right).cnf());
+		Formula lft = left.cnf();
+		Formula rgt = right.cnf();
+		// if left or right cnf are an And, distribute
+		if (lft instanceof And) {
+			And a = (And) lft;
+			return new And(new Or(a.getLeft(), rgt).cnf(), new Or(a.getRight(), rgt).cnf()).simplify();
 		}
-		// otherwise make the formula nnf first
-		return this.nnf().cnf();
+		if (rgt instanceof And) {
+			And a = (And) rgt;
+			return new And(new Or(lft, a.getLeft()).cnf(), new Or(lft, a.getRight()).cnf()).simplify();
+		}
+		// otherwise we have a cnf.
+		return new Or(lft, rgt).simplify();
 	}
 
 	@Override
 	public Formula dnf() {
-		if (this.isNNF()) {
-			return new Or(left.nnf(), right.nnf()).simplify();
-		} else {
-			return this.nnf().dnf();
-		}
+		return new Or(left.dnf(), right.dnf());
 	}
 
 	@Override
