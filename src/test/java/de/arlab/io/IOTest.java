@@ -64,10 +64,8 @@ public class IOTest {
 	private static DPLLSolver lclsolver = new DPLLSolver(new LeastCommonLiteralHeuristic());
 	private static DPLLSolver mcvsolver = new DPLLSolver(new MostCommonVariableHeuristic());
 	private static DPLLSolver mclsolver = new DPLLSolver(new MostCommonLiteralHeuristic());
-	private static DIMACSParser dm1 = new DIMACSParser();
-	private static DIMACSParser dm2 = new DIMACSParser();
-	private static DIMACSParser dm3 = new DIMACSParser();
-	private static DIMACSParser dm4 = new DIMACSParser();
+	private static DIMACSParser parser = new DIMACSParser();
+	private static Set<Clause> testClause = new HashSet<>();
 
 	@BeforeClass
 	public static void initialize() {
@@ -84,36 +82,22 @@ public class IOTest {
 		dnf = new Or(new And(new Not(x1), x2), new And(new And(x1, x2), x3));
 		nonDnf1 = new Or(new And(new Not(new Not(x1)), x2), new And(new And(x1, x2), x3));
 		nonDnf2 = new Or(new And(new Not(x1), x2), new Or(new And(x1, new Or(x2, x1)), x3));
+		testClause.add(new Clause(new Literal(1), new Literal(2), new Literal(3)));
+		testClause.add(new Clause(new Literal(2), new Literal(3), new Literal(4)));
+		testClause.add(new Clause(new Literal(5), new Literal(3), new Literal(-4)));
 	}
 
 	@Test
-	public void testTrivial1() throws IOException {
-		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
-
-	}
+	public void testIO() throws IOException {
+		Set<Clause> s = parser.parse("test.cnf");
+		assertEquals(parser.getNumVars(),5);
+		assertEquals(parser.getNumClauses(),3);
+		assertEquals(parser.getClauses(),testClause);
+ 	}
+	
 	@Test
-	public void testMostLit1() throws IOException {
-		assertFalse(mclsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
-
-	}
-
-	@Test
-	public void testMostVar1() throws IOException {
-		assertFalse(mcvsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
-	}
-	@Test
-	public void testTrivial2() throws IOException {
-		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
-
-	}
-	@Test
-	public void testMostLit2() throws IOException {
-		assertFalse(mclsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
-
-	}
-	@Test
-	public void testMostVar2() throws IOException {
-		assertFalse(mcvsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
+	public void testHeuristic() {
+		
 	}
 }
  
