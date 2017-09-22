@@ -1,0 +1,1 @@
+Bei Tests über die kleineren CNF Dateien erwiesen sich die MostCommon Heuristiken als die schnellsten. Bei Tests über größere Dateien mit mehr Variablen 

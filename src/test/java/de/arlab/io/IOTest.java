@@ -99,7 +99,7 @@ public class IOTest {
 	@Test
 	public void testHeuristic() throws IOException {
 		Set<Clause> s = parser2.parse("src/test/java/de/arlab/io/heuristics.cnf");
-		List<Clause> l = new ArrayList<>();
+		List<Clause> l = new ArrayList<>();//
 		l.addAll(s);
 		assertEquals(new MostCommonLiteralHeuristic().chooseLiteral(l),new Literal(3));
 		assertEquals(new LeastCommonLiteralHeuristic().chooseLiteral(l),new Literal(-1));
