@@ -68,18 +68,19 @@ public class DPLLSolver extends Solver {
 	 */
 	private boolean dpll(final List<Clause> clauseSet) {
 		Literal lit = containsUnitClause(clauseSet);
-		while (lit != null) {
-			this.model.put(lit.getVar(), lit.getPhase());
-			//System.out.println(lit); System.out.println(clauseSet);
+		while (lit != null) { // Unit constraint propagation
+			// tell the model if we used a positive or negative variable
+			this.model.put(lit.getVar(), lit.getPhase()); 
 			unitSubsumption(clauseSet, lit);
-			//System.out.println(clauseSet);
 			unitResolution(clauseSet, lit.negate());
 			lit = containsUnitClause(clauseSet);
 		}
+		// Trivial cases?
 		if (containsEmptyClause(clauseSet))
 			return false;
 		if (clauseSet.isEmpty())
 			return true;
+		// Recursion. Choose a literal, add it or its negation to the set and work with that.
 		Literal nextChoice = heuristic.chooseLiteral(clauseSet);
 		if (dpll(unionWithUnitClause(Clause.copyClauseSet(clauseSet), nextChoice)))
 			return true;

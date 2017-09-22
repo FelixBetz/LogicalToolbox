@@ -38,13 +38,13 @@ public class Clause {
 	 * @param lit
 	 *            the single literal in this clause
 	 */
-	public Clause (final Clause other) {
+	public Clause(final Clause other) {
 		literals = new HashSet<>();
 		for (Literal literal : other.getLiterals()) {
 			literals.add(new Literal(literal));
 		}
 	}
-	
+
 	public Clause(final Literal lit) {
 		literals = new HashSet<>();
 		literals.add(lit);
@@ -79,14 +79,19 @@ public class Clause {
 	public Set<Literal> getLiterals() {
 		return literals;
 	}
-
+	/**
+	 * Returns the first literal of this clause if it exists.
+	 * 
+	 * @return the first literal of this clause or null if the clause is empty
+	 */
 	public Literal getFirstLiteral() {
-		if(this.literals.isEmpty()) {
+		if (this.literals.isEmpty()) {
 			return null;
 		}
-	Iterator<Literal> it = literals.iterator();
-	return it.next();
+		Iterator<Literal> it = literals.iterator();
+		return it.next();
 	}
+
 	/**
 	 * Adds a literal to this clause.
 	 * 
@@ -191,6 +196,8 @@ public class Clause {
 	public static Set<Clause> formula2Clauses(final Formula f) {
 		Formula cnf = f.cnf();
 		Set<Clause> set = new HashSet<>();
+		// Literals are already clauses
+		// if cnf instanceof Verum then the set is empty, no set manipulation needed
 		if (cnf instanceof Falsum) {
 			set.add(new Clause());
 		} else if (cnf instanceof Variable) {
@@ -198,13 +205,13 @@ public class Clause {
 		} else if (cnf instanceof Not) {
 			Variable var = (Variable) ((Not) cnf).getOperand();
 			set.add(new Clause(new Literal(var, false)));
-		} else if (cnf instanceof Or) {
+		} else if (cnf instanceof Or) { // as our formula is in cnf left and right are clauses too, join them
 			Set<Clause> left = Clause.formula2Clauses(((Or) cnf).getLeft());
 			Set<Clause> right = Clause.formula2Clauses(((Or) cnf).getRight());
 			Clause c = Clause.setOfClausesToClause(left);
 			c.unionWith(Clause.setOfClausesToClause(right));
 			set.add(c);
-		} else if (cnf instanceof And) {
+		} else if (cnf instanceof And) { // convert left and right to sets of clauses and join both sets
 			set = Clause.formula2Clauses(((And) cnf).getLeft());
 			Set<Clause> right = Clause.formula2Clauses(((And) cnf).getRight());
 			set.addAll(right);
@@ -213,7 +220,10 @@ public class Clause {
 	}
 
 	/**
+	 * Iterate over a set of clauses and union all clauses together?
 	 * 
+	 * @param clauses
+	 * @return a clause
 	 */
 	private static Clause setOfClausesToClause(final Set<Clause> clauses) {
 		Iterator<Clause> it = clauses.iterator();
@@ -232,39 +242,56 @@ public class Clause {
 	 * @return the corresponding formula in cnf
 	 */
 	public static Formula clauses2Formula(final Set<Clause> clauses) {
-		if (clauses.isEmpty()) {
+		if (clauses.isEmpty()) { // Empty set represents verum
 			return Verum.mk();
 		}
 		Iterator<Clause> it = clauses.iterator();
+		// Variable that holds the complete formula
 		Formula f = Clause.clause2Formula(it.next());
-		while(it.hasNext()) {
+		// Join the temp formula (by and) with the next converted clause
+		while (it.hasNext()) {
 			Formula v = Clause.clause2Formula(it.next());
-			f = new And (v, f);
+			f = new And(v, f);
 		}
-		return f;		
-		
+		return f;
+
 	}
-	
-	public static Formula clause2Formula (final Clause c) {
-		if (c.isEmpty()) {
+
+	/**
+	 * Convert a set of literals in a formula
+	 * 
+	 * @param c
+	 * @return the formula that is represented by the given clause
+	 */
+	public static Formula clause2Formula(final Clause c) {
+		if (c.isEmpty()) { // Empty Clause represents falsum.
 			return Falsum.mk();
 		}
 		Iterator<Literal> it = c.getLiterals().iterator();
+		// f collects the formula
 		Formula f = Clause.literal2Formula(it.next());
-		while(it.hasNext()) {
+		// Join the formula and the next variable by or.
+		while (it.hasNext()) {
 			Formula v = Clause.literal2Formula(it.next());
-			f = new Or (v, f);
+			f = new Or(v, f);
 		}
-		return f;		
+		return f;
 	}
-	
-	private static Formula literal2Formula (final Literal lit) {
+
+	/**
+	 * Convert a literal to a variable
+	 * 
+	 * @param lit
+	 * @return a variable (type formula) or its negation
+	 */
+	private static Formula literal2Formula(final Literal lit) {
 		Formula v = lit.getVar();
-		if(!lit.getPhase()) {
+		if (!lit.getPhase()) {
 			v = new Not(v);
 		}
 		return v;
 	}
+
 	/**
 	 * Returns all variables which are present in a given set of clauses.
 	 * 
@@ -278,7 +305,13 @@ public class Clause {
 			vars.addAll(vars(c));
 		return vars;
 	}
-	
+
+	/**
+	 * Returns a copy of a set of clauses
+	 * 
+	 * @param clauseSet
+	 * @return a copy of the set
+	 */
 	public static Set<Clause> copyClauseSet(final Set<Clause> clauseSet) {
 		Set<Clause> clauseList = new HashSet<>();
 		for (Clause clause : clauseSet) {
@@ -286,6 +319,13 @@ public class Clause {
 		}
 		return clauseList;
 	}
+
+	/**
+	 * Returns a copy of a list of clauses
+	 * 
+	 * @param clauseSet
+	 * @return a copy of the list
+	 */
 	public static List<Clause> copyClauseSet(final List<Clause> clauseSet) {
 		List<Clause> clauseList = new ArrayList<>();
 		for (Clause clause : clauseSet) {
@@ -293,6 +333,13 @@ public class Clause {
 		}
 		return clauseList;
 	}
+
+	/**
+	 * list all the variables used in a clause
+	 * 
+	 * @param c
+	 * @return all variables in a set
+	 */
 	private static Set<Variable> vars(final Clause c) {
 		final Set<Variable> vars = new HashSet<Variable>();
 		for (Literal l : c.getLiterals())

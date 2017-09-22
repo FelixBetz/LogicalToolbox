@@ -36,11 +36,12 @@ public final class And extends BinaryFormula {
 		Formula newLeft = left.simplify();
 		Formula newRight = right.simplify();
 		if (newLeft.equals(newRight)) {
-			return newLeft;
+			return newLeft; // a and a is a
 		}
 		if ((newLeft instanceof Falsum) || (newRight instanceof Falsum)) {
-			return Formula.FALSUM;
+			return Formula.FALSUM; // False and anything is always false
 		}
+		// True and anything is anything
 		if (newLeft instanceof Verum) {
 			return newRight;
 		}
@@ -93,11 +94,6 @@ public final class And extends BinaryFormula {
 	@Override
 	public Formula nnf() {
 		return new And(left.nnf(), right.nnf()).simplify();
-/*		if (this.isNNF()) {
-			return new And(left.nnf(), right.nnf()).simplify();
-		} else {
-			return this.nnf();
-		}*/
 	}
 
 	@Override
@@ -107,10 +103,11 @@ public final class And extends BinaryFormula {
 
 	@Override
 	public Formula dnf() {
-		if (this.isNNF()) {
+		if (this.isNNF()) { // only work with the formula if it is in nnf.
 			if (this.isDNF()) {
-				return this;
+				return this; // trivial
 			}
+			// if one or both sides contains an Or, use distributivity
 			if (right instanceof Or) {
 				Or a = (Or) right;
 				return new Or(new And(left, a.getLeft()).dnf(), new And(left, a.getRight()).dnf());

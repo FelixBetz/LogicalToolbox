@@ -10,16 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A trivial heuristics, which chooses the next available variable.
+ * A heuristic that chooses the variable that is most common in the set of
+ * clauses
  */
 public class MostCommonVariableHeuristic extends VariableHeuristic {
 
 	@Override
 	public Literal chooseLiteral(List<Clause> clauseSet) {
 		Map<Variable, Integer> map = variableMap(clauseSet);
+		// iterate over the map and keep the entry that has the highest value
 		Map.Entry<Variable, Integer> maxEntry = null;
 		for (Map.Entry<Variable, Integer> entry : map.entrySet()) {
-			if (maxEntry == null || maxEntry.getValue() > entry.getValue())
+			if (maxEntry == null || maxEntry.getValue() < entry.getValue())
 				maxEntry = entry;
 
 		}

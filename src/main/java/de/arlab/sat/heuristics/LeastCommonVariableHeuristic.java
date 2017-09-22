@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A trivial heuristics, which chooses the next available variable.
+ * A heuristic that chooses the variable that is least common in the set of
+ * clauses
  */
 public class LeastCommonVariableHeuristic extends VariableHeuristic {
 

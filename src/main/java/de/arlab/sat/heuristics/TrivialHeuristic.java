@@ -11,9 +11,10 @@ import java.util.List;
  */
 public class TrivialHeuristic implements ChoiceHeuristic {
 
-  @Override
-  public Literal chooseLiteral(final List<Clause> clauseSet) {
-	  Clause c = clauseSet.get(0);
-    return c.getFirstLiteral();
-  }
+	@Override
+	public Literal chooseLiteral(final List<Clause> clauseSet) {
+		Clause c = clauseSet.get(0); // we only choose from a non-empty set anyways, so we ignore the fact that c
+										// could be null
+		return c.getFirstLiteral();
+	}
 }

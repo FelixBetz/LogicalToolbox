@@ -10,11 +10,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A trivial heuristics, which chooses the next available variable.
+ * An abstract class for heuristics that work on variables.
  */
 public abstract class VariableHeuristic implements ChoiceHeuristic {
-
-	public static Map<Variable, Integer> variableMap (List<Clause> clauseSet) {
+	/**
+	 * count occurance of variables
+	 * 
+	 * @param clauseSet
+	 *            a (non-empty) set of clauses
+	 * @return map a Hashmap that tells us which variable occurs how often.
+	 */
+	public static Map<Variable, Integer> variableMap(List<Clause> clauseSet) {
 		Map<Variable, Integer> map = new HashMap<>();
 		for (Clause clause : clauseSet) {
 			for (Literal literal : clause.getLiterals()) {

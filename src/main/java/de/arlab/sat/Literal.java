@@ -21,11 +21,18 @@ public class Literal {
 		this.var = var;
 		this.phase = phase;
 	}
-	
+
+	/**
+	 * Constructor to copy a literal.
+	 * 
+	 * @param other
+	 *            the literal to be copied
+	 */
 	public Literal(final Literal other) {
 		this.var = other.getVar();
 		this.phase = other.getPhase();
 	}
+
 	/**
 	 * Alternative constructor for a literal with a positive phase.
 	 * 
@@ -41,7 +48,8 @@ public class Literal {
 	 * alternative Constructor for a literal .
 	 * 
 	 * @param i
-	 *            an integer to determine the name of the variable and phase of this literal
+	 *            an integer to determine the name of the variable and phase of this
+	 *            literal
 	 */
 	public Literal(final Integer i) {
 		if (i > 0) {

@@ -9,11 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A trivial heuristics, which chooses the next available variable.
+ * An abstract class for heuristics that work on literals.
  */
 public abstract class LiteralHeuristic implements ChoiceHeuristic {
-
-	public Map<Literal, Integer> literalMap (List<Clause> clauseSet) {
+	/**
+	 * count occurance of literals
+	 * @param clauseSet
+	 *            a (non-empty) set of clauses
+	 * @return map a Hashmap that tells us which literal occurs how often.
+	 */
+	public Map<Literal, Integer> literalMap(List<Clause> clauseSet) {
 		Map<Literal, Integer> map = new HashMap<>();
 		for (Clause clause : clauseSet) {
 			for (Literal literal : clause.getLiterals()) {

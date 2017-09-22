@@ -88,26 +88,22 @@ public final class DIMACSParser {
 			while (scan.hasNextLine() && scan.next().equals("c")) {
 				line = scan.nextLine();
 			}
-			// get rid of the problem Line-beginning
-			String n = scan.next();
+			// at this point we already scanned the p of the problem line, no lets skip "cnf"
+			line = scan.next();
 			// set number of variables and clauses
 			numVars = scan.nextInt();
 			numClauses = scan.nextInt();
-			//System.out.println(numVars);
-			//System.out.println(numClauses);
-			//line = scan.nextLine();
 			// Start filling clauses
 			Clause c = new Clause();
 			while (scan.hasNextInt()) {
 				Integer i = scan.nextInt();
-				if (i.equals(0)) {
+				if (i.equals(0)) { // zero ends a clause
 					this.clauses.add(c);
 					c = new Clause();
 				} else
 					c.addLiteral(new Literal(i));
 			}
 		}
-		//System.out.println(this.clauses);
 		return this.clauses;
 	}
 }
