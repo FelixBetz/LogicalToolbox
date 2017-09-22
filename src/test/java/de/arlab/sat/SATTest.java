@@ -155,7 +155,9 @@ public class SATTest {
 		assertEquals(solver.getModel(cnf), m);
 		Map<Variable, Boolean> m2 = new HashMap<>();
 		assertEquals(solver.getModel(t), m2);
+		assertTrue(solver.isSAT(cnf));
 		assertFalse(solver.isContradiction(cnf));
+		assertTrue(solver.isSAT(cnf));
 		assertTrue(solver.isEquivalent(dnf, dnf));
 		assertFalse(solver.isContradiction(new Or(x1,new Not(x1))));
 		assertTrue(solver.isTautology(new Or(x1,new Not(x1))));
