@@ -332,12 +332,35 @@ public class FormulaTest {
 
 	@Test
 	public void testDIMACSL() throws IOException {
-		DIMACSParser dm1 = new DIMACSParser();
-		DIMACSParser dm2 = new DIMACSParser();
-		DIMACSParser dm3 = new DIMACSParser();
-		//assertTrue(solver.isSAT(dm.parse("aim-50-1_6-yes1-1.cnf")));
-		//assertTrue(solver.isSAT(dm1.parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-1.cnf")));
-		assertFalse(solver.isSAT(dm2.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
-		//assertTrue(solver.isSAT(dm3.parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
+
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-1.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-2.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-3.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-1_6-yes1-4.cnf")));
+		
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-2_0-yes1-1.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-2_0-yes1-2.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-2_0-yes1-3.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-2_0-yes1-4.cnf")));
+		
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-3_4-yes1-1.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-3_4-yes1-2.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-3_4-yes1-3.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-3_4-yes1-4.cnf")));
+		
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-6_0-yes1-1.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-6_0-yes1-2.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-6_0-yes1-3.cnf")));
+		assertTrue(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/yes/aim-50-6_0-yes1-4.cnf")));
+
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/aim-50-1_6-no-1.cnf")));
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
+		
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-01.cnf")));
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-02.cnf")));
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-04.cnf")));
 	}
 }
