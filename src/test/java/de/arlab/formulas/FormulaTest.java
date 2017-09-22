@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+
+
 public class FormulaTest {
 
 	private static Map<Variable, Boolean> assignment = new HashMap<Variable, Boolean>();
@@ -209,6 +211,12 @@ public class FormulaTest {
 		assertFalse(new Not(new Not(t)).isNNF());
 	}
 
+	@Test
+	public void test26() {
+		assertEquals(Formula.applyDeMorgan(new Not(new And(v1,v2))),new Or(new Not(v1), new Not(v2)));
+		assertEquals(Formula.applyDeMorgan(new Not(new Or(v1,v2))),new And(new Not(v1), new Not(v2)));
+	}
+	
 	@Test
 	public void testNNF() {
 
