@@ -65,6 +65,7 @@ public class IOTest {
 	private static DPLLSolver mcvsolver = new DPLLSolver(new MostCommonVariableHeuristic());
 	private static DPLLSolver mclsolver = new DPLLSolver(new MostCommonLiteralHeuristic());
 	private static DIMACSParser parser = new DIMACSParser();
+	private static DIMACSParser parser2 = new DIMACSParser();
 	private static Set<Clause> testClause = new HashSet<>();
 
 	@BeforeClass
@@ -96,8 +97,14 @@ public class IOTest {
  	}
 	
 	@Test
-	public void testHeuristic() {
-		
+	public void testHeuristic() throws IOException {
+		Set<Clause> s = parser2.parse("src/test/java/de/arlab/io/heuristics.cnf");
+		List<Clause> l = new ArrayList<>();
+		l.addAll(s);
+		assertEquals(new MostCommonLiteralHeuristic().chooseLiteral(l),new Literal(3));
+		assertEquals(new LeastCommonLiteralHeuristic().chooseLiteral(l),new Literal(-1));
+		assertEquals(new MostCommonVariableHeuristic().chooseLiteral(l),new Literal(1));
+		assertEquals(new LeastCommonVariableHeuristic().chooseLiteral(l),new Literal(4));
 	}
 }
  
