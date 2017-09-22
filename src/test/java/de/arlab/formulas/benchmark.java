@@ -19,13 +19,36 @@ public class benchmark {
 	private static DPLLSolver solver3 = new DPLLSolver(new LeastCommonVariableHeuristic());
 	private static DPLLSolver solver4 = new DPLLSolver(new MostCommonLiteralHeuristic());
 	private static DPLLSolver solver5 = new DPLLSolver(new MostCommonVariableHeuristic());
+	
 	@Test
-	public void testDIMACSL() throws IOException {
+	public void benchTrivial() throws IOException {
+		assertFalse(solver1.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+	}
+	@Test
+	public void benchLeastCommonLiteralHeuristic() throws IOException {
+		assertFalse(solver2.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+	}
+	@Test
+	public void LeastCommonVariableHeuristic() throws IOException {
+		assertFalse(solver3.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+	}
+	@Test
+	public void benchMostCommonLiteralHueristic() throws IOException {
+		assertFalse(solver4.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+	}
+	@Test
+	public void MostCommonVariableHeuristic() throws IOException {
+		assertFalse(solver5.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+	}
+	
+	
+	//@Test
+	//public void testDIMACSL() throws IOException {
 
 		
 		//assertFalse(solver1.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 		//assertFalse(solver2.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
-	//	assertFalse(solver3.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
+		//assertFalse(solver3.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 		//assertFalse(solver4.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 		//assertFalse(solver5.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 		
@@ -42,5 +65,5 @@ public class benchmark {
 		//assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
 		//assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
 		//assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-04.cnf")));
-	}
+	//}
 }
