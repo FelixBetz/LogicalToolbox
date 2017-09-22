@@ -20,7 +20,7 @@ public class benchmark {
 	private static DPLLSolver solver3 = new DPLLSolver(new LeastCommonVariableHeuristic());
 	private static DPLLSolver solver4 = new DPLLSolver(new MostCommonLiteralHeuristic());
 	private static DPLLSolver solver5 = new DPLLSolver(new MostCommonVariableHeuristic());
-	/*
+	
 	@Test
 	public void bench1Trivial() throws IOException {
 		assertFalse(solver1.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
@@ -41,7 +41,7 @@ public class benchmark {
 	public void bench1MostCommonVariableHeuristic() throws IOException {
 		assertFalse(solver5.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
 	}
-	*/
+	
 	
 	@Test
 	public void bench2MostCommonLiteralHueristic() throws IOException {
