@@ -53,6 +53,7 @@ public class SATTest {
 	private static Clause clause1 = new Clause();
 	private static Clause clause2 = new Clause();
 	private static Clause clause3 = new Clause(lit2);
+	private static Clause clause4 = new Clause();
 	private static DPLLSolver solver = new DPLLSolver(new TrivialHeuristic());
 
 	@BeforeClass
@@ -72,11 +73,23 @@ public class SATTest {
 		nonDnf2 = new Or(new And(new Not(x1), x2), new Or(new And(x1, new Or(x2, x1)), x3));
 	}
 
-	
-
+  
 	@Test
 	public void testClause() {
+		assertEquals(clause1.getFirstLiteral(), null);	
 		clause1.addLiteral(lit1);
+		assertEquals(clause1.getFirstLiteral(), lit1);	
+		clause1.addLiteral(lit1);
+		
+		
+		clause4.unionWith(clause4);
+		assertEquals(clause4, new Clause());
+		
+		clause4.addLiteral(lit1);
+		clause4.addLiteral(lit2);
+		assertEquals(clause4.getFirstLiteral(),lit1);
+		
+		
 		clause3.unionWith(clause1);
 		assertTrue(clause1.isUnit());
 		assertFalse(clause2.isUnit());
