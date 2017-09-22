@@ -7,6 +7,7 @@ import de.arlab.io.DIMACSParser;
 import de.arlab.sat.*;
 import de.arlab.sat.heuristics.LeastCommonLiteralHeuristic;
 import de.arlab.sat.heuristics.LeastCommonVariableHeuristic;
+import de.arlab.sat.heuristics.MostCommonLiteralHeuristic;
 import de.arlab.sat.heuristics.MostCommonVariableHeuristic;
 import de.arlab.sat.heuristics.TrivialHeuristic;
 import de.arlab.sat.heuristics.VariableHeuristic;
@@ -59,8 +60,10 @@ public class IOTest {
 	private static Clause clause2 = new Clause();
 	private static Clause clause3 = new Clause(lit2);
 	private static DPLLSolver solver = new DPLLSolver(new TrivialHeuristic());
-	private static DPLLSolver lcvsolver = new DPLLSolver(new MostCommonVariableHeuristic());
+	private static DPLLSolver lcvsolver = new DPLLSolver(new LeastCommonVariableHeuristic());
 	private static DPLLSolver lclsolver = new DPLLSolver(new LeastCommonLiteralHeuristic());
+	private static DPLLSolver mcvsolver = new DPLLSolver(new MostCommonVariableHeuristic());
+	private static DPLLSolver mclsolver = new DPLLSolver(new MostCommonLiteralHeuristic());
 	private static DIMACSParser dm1 = new DIMACSParser();
 	private static DIMACSParser dm2 = new DIMACSParser();
 	private static DIMACSParser dm3 = new DIMACSParser();
@@ -84,27 +87,33 @@ public class IOTest {
 	}
 
 	@Test
-	public void testGettersAndSetters() {
-		assertEquals(F.var1, new And(F.var1, F.var2).getLeft());
-		assertEquals(F.var2, new And(F.var1, F.var2).getRight());
-		assertEquals(F.var1, new Or(F.var1, F.var2).getLeft());
-		assertEquals(F.var2, new Or(F.var1, F.var2).getRight());
+	public void testTrivial1() throws IOException {
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
+
+	}
+	@Test
+	public void testMostLit1() throws IOException {
+		assertFalse(mclsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
+
 	}
 
 	@Test
-	public void testDIMACSL() throws IOException {
-		String file = "src/test/java/de/arlab/io/test.cnf";
-	//	Set<Clause> s = dm1.parse("src/test/resources/dimacs/yes/aim-50-1_6-yes2-0.cnf");
-		Set<Clause> c = new HashSet<>();
-		Collections.addAll(c, 
-				new Clause(new Literal(new Variable("1")), new Literal(new Variable("2")),new Literal(new Variable("3"))),
-				new Clause(new Literal(new Variable("2")), new Literal(new Variable("3")),new Literal(new Variable("4"))),
-				new Clause(new Literal(new Variable("5")), new Literal(new Variable("3")),new Literal(new Variable("4"),false)));
-//		assertTrue(lclsolver.isSAT(s));
-//		assertFalse(solver.isSAT(dm2.parse("src/test/resources/dimacs/no/aim-50-1_6-no-1.cnf")));
-//      	assertFalse(lcvsolver.isSAT(dm3.parse("src/test/resources/dimacs/no/uuf50-01.cnf")));
-//     	assertFalse(lclsolver.isSAT(dm4.parse("src/test/resources/dimacs/no/uuf50-02.cnf")));
+	public void testMostVar1() throws IOException {
+		assertFalse(mcvsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-021.cnf")));
+	}
+	@Test
+	public void testTrivial2() throws IOException {
+		assertFalse(solver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
 
+	}
+	@Test
+	public void testMostLit2() throws IOException {
+		assertFalse(mclsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
+
+	}
+	@Test
+	public void testMostVar2() throws IOException {
+		assertFalse(mcvsolver.isSAT(new DIMACSParser().parse("src/test/resources/dimacs/benchmarks/uuf100-03.cnf")));
 	}
 }
  
