@@ -40,9 +40,14 @@ public class bddtest2 {
 		
 		BDDManager man1 = new BDDManager();
 		//man1.mkBDD(new Not(new And(new Not(v1),v2)));
-		//assertEquals(man1.toFormula(),new Not(new And(new Not(v1),v2)));
+		//assertEquals(man1.toFormula(new Not(new And(new Not(v1),v2))),new Not(new And(new Not(v1),v2)));
 	
-		man1.mkBDD(new Or(v1,v2));
-		assertEquals(man1.toFormula(),new Or(v1,v2));
+		//man1.mkBDD(new Or(v1,v2));
+		//assertEquals(man1.toFormula(new Or(v1,v2)),new Or(v1,v2));
+		//System.out.println(man1.getModel(new Not(new And(new Not(v1),v2))));
+		//System.out.println(man1.getModel(new And(new Not(v1),v2)));
+		//System.out.println(man1.getModel(new Not(v1)));
+		System.out.println(man1.getModel(new And(v1,new Not(v2))));
+		System.out.println(man1.getModel(new And(new Not(v1),v2)));
 	}
 }
