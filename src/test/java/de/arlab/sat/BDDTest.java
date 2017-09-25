@@ -8,6 +8,7 @@ import org.junit.Test;
 import de.arlab.bdd.BDDManager;
 import de.arlab.bdd.BDDNode;
 import de.arlab.formulas.*;
+import de.arlab.formulas.parser.Parser;
 
 public class BDDTest {
 	private static BDDManager manager = new BDDManager();
@@ -16,10 +17,6 @@ public class BDDTest {
 	private static BDDNode n2 = new BDDNode(new Variable("s"), 2, -1);
 	@Test
 	public void testClause() {
-		assertEquals(manager.lookupUnique(n1), 2);
-		assertEquals(manager.lookupUnique(n2), 3);
-		assertEquals(manager.expandNode(2), n1);
-		assertEquals(manager.expandNode(3), n2);
-		assertTrue(manager2.isSAT(new Or(F.var1, (new Not(F.var2)))));
+		System.out.println(manager2.getModel(new Or(F.var1,F.var2)));
 	}
 }
