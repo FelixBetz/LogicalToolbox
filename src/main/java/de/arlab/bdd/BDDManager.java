@@ -269,7 +269,7 @@ public class BDDManager extends Solver {
 			return map;
 		}
 
-		//System.out.println(map);
+		System.out.println(map);
 		map = getModel(node.getRight());
 		if (!map.isEmpty()) {
 			map.put(node.getVar(), false);
