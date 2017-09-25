@@ -84,9 +84,10 @@ private Formula toFormula(int n) {
 	 *             faulty implementation
 	 */
 	public BDDNode expandNode(final int n) {
-		if (!unique.containsKey(n))
+		int m=Math.abs(n);
+		if (!unique.containsKey(m))
 			throw new IllegalArgumentException();
-		BDDNode node = unique.get(n);
+		BDDNode node = unique.get(m);
 		if (n < 0)
 			return node.complement();
 		return node;

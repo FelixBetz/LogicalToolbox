@@ -20,7 +20,6 @@ public class BDDTest {
 		assertEquals(manager.lookupUnique(n2), 3);
 		assertEquals(manager.expandNode(2), n1);
 		assertEquals(manager.expandNode(3), n2);
-		int a = manager2.mkBDD(new Not(new Variable("c")));
-		System.out.println(a);
+		assertTrue(manager2.isSAT(new Or(F.var1, (new Not(F.var2)))));
 	}
 }
