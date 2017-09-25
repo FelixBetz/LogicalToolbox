@@ -59,7 +59,20 @@ public class BDDManager extends Solver {
 		return 1;
 
 	}
+public Formula toFormula() {
+	return toFormula(nextIndex-1);
+}
 
+private Formula toFormula(int n) {
+	if(n==1)
+		return Formula.VERUM;
+	if(n==-1)
+		return Formula.FALSUM;
+	BDDNode node = expandNode(n);
+	Formula l = toFormula(node.getLeft());
+	Formula r = toFormula(node.getRight());
+	return new Or(new And(node.getVar(), l),new And(new Not(node.getVar()), r)).simplify();
+}
 	/**
 	 * Returns the corresponding BDD node for a given index.
 	 * 
@@ -162,7 +175,9 @@ public class BDDManager extends Solver {
 			return m2;
 		if (m2 == BDD_TRUE)
 			return m1;
-		Set<Integer> set = new HashSet<>(m1, m2);
+		Set<Integer> set = new HashSet<>();
+		set.add(m1);
+		set.add(m2);
 		if (computeTable.containsKey(set))
 			return computeTable.get(set);
 
