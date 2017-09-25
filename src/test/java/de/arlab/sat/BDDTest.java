@@ -15,6 +15,9 @@ public class BDDTest {
 	private static BDDManager manager2 = new BDDManager();
 	private static BDDNode n1 = new BDDNode(new Variable("t"), 1, -1);
 	private static BDDNode n2 = new BDDNode(new Variable("s"), 2, -1);
+	
+	
+	
 	@Test
 	public void testClause() {
 		System.out.println(manager2.getModel(new Or(F.var1,F.var2)));
