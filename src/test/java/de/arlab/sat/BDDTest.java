@@ -20,6 +20,6 @@ public class BDDTest {
 	
 	@Test
 	public void testClause() {
-		System.out.println(manager2.getModel(new Or(F.var1,F.var2)));
+		System.out.println(manager2.toFormula(new And((F.var1), new Not(F.var2))));
 	}
 }

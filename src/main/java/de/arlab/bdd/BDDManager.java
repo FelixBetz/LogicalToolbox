@@ -51,7 +51,7 @@ public class BDDManager extends Solver {
 	 */
 	public int mkBDD(final Formula formula) {
 		if (formula instanceof Falsum)
-			return -1;
+			return BDD_FALSE;
 		if (formula instanceof Variable)
 			return bddVar((Variable) formula);
 		if (formula instanceof Not)
@@ -60,7 +60,7 @@ public class BDDManager extends Solver {
 			return bddAnd(mkBDD(((And) formula).getLeft()), mkBDD(((And) formula).getRight()));
 		if (formula instanceof Or)
 			return bddOr(mkBDD(((Or) formula).getLeft()), mkBDD(((Or) formula).getRight()));
-		return 1;
+		return BDD_TRUE;
 
 	}
 
@@ -195,11 +195,13 @@ public class BDDManager extends Solver {
 		int i;
 		if (node1.getVar().equals(node2.getVar())) {
 			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), node2.getLeft()),
-					bddAnd(node1.getRight(), node2.getRight()));
+					                   bddAnd(node1.getRight(), node2.getRight()));
 		} else if (order(node1.getVar(), node2.getVar())) {
-			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), m2), bddAnd(node1.getRight(), m2));
+			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), m2), 
+					                   bddAnd(node1.getRight(), m2));
 		} else {
-			i = mkNode(node2.getVar(), bddAnd(m1, node2.getLeft()), bddAnd(m1, node2.getRight()));
+			i = mkNode(node2.getVar(), bddAnd(m1, node2.getLeft()), 
+					                   bddAnd(m1, node2.getRight()));
 		}
 		computeTable.put(set, i);
 		return i;
