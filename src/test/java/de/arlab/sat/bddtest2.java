@@ -23,19 +23,26 @@ public class bddtest2 {
 	
 	
 	@Test
-	public void testClause() {
+	public void testBdd() {
 		assertEquals(manager.lookupUnique(n1), 2);
 		assertEquals(manager.lookupUnique(n2), 3);
 		assertEquals(manager.expandNode(2), n1);
 		assertEquals(manager.expandNode(3), n2);
 		assertTrue(manager2.isSAT(new Or(F.var1, (new Not(F.var2)))));
 		
-		assertTrue(manager.isSAT(new And(v1,v2)));
-		assertFalse(manager.isSAT(new And(v1,new Not(v1))));
+		assertTrue(new BDDManager().isSAT(new And(v1,v2)));
+		assertFalse(new BDDManager().isSAT(new And(v1,new Not(v1))));
 		
-		assertFalse(manager.isSAT(new And(new Or(v1,v2), new And(v1, new Not(v1)))));
-		assertTrue(manager.isSAT(new And(new Or(v1,v2), new Or(v1, new Not(v1)))));
+		assertFalse(new BDDManager().isSAT(new And(new Or(v1,v2), new And(v1, new Not(v1)))));
+		assertTrue(new BDDManager().isSAT(new And(new Or(v1,v2), new Or(v1, new Not(v1)))));
+		assertFalse(new BDDManager().isSAT(new And(new Or(new And(v1, new Not(v1)),v2), new Or(new And(v3, new Not(v3)),new Not(v2)))));
 		
-		assertFalse(manager.isSAT(new And(new Or(new And(v1, new Not(v1)),v2), new Or(new And(v3, new Not(v3)),new Not(v2)))));
+		
+		BDDManager man1 = new BDDManager();
+		//man1.mkBDD(new Not(new And(new Not(v1),v2)));
+		//assertEquals(man1.toFormula(),new Not(new And(new Not(v1),v2)));
+	
+		man1.mkBDD(new Or(v1,v2));
+		assertEquals(man1.toFormula(),new Or(v1,v2));
 	}
 }
