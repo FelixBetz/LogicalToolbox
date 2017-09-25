@@ -102,16 +102,16 @@ public final class Or extends BinaryFormula {
 
 	@Override
 	public Formula cnf() {
-		Formula lft = left.cnf();
-		Formula rgt = right.cnf();
+		Formula lft = left.dnf();
+		Formula rgt = right.dnf();
 		// if left or right cnf are an And, distribute
 		if (lft instanceof And) {
 			And a = (And) lft;
-			return new And(new Or(a.getLeft(), rgt).cnf(), new Or(a.getRight(), rgt).cnf()).simplify();
+			return new And(new Or(a.getLeft(), rgt).dnf(), new Or(a.getRight(), rgt).dnf()).simplify();
 		}
 		if (rgt instanceof And) {
 			And a = (And) rgt;
-			return new And(new Or(lft, a.getLeft()).cnf(), new Or(lft, a.getRight()).cnf()).simplify();
+			return new And(new Or(lft, a.getLeft()).dnf(), new Or(lft, a.getRight()).dnf()).simplify();
 		}
 		// otherwise we have a cnf.
 		return new Or(lft, rgt).simplify();
