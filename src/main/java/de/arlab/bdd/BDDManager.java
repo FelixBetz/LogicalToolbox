@@ -203,23 +203,56 @@ public class BDDManager extends Solver {
 	 *            the BDD
 	 * @return a satisfying variable mapping or {@code null} if none exists
 	 */
+//	private Map<Variable, Boolean> getModel(final int root) {
+//		Map<Variable, Boolean> map = new HashMap<>();
+//		int n = 1;
+//		boolean b = true;
+//		while (b) {
+//			b = false;
+//			for (Map.Entry<BDDNode, Integer> entry : uback.entrySet()) {
+//				if (entry.getKey().getLeft() == n) {
+//					map.put(entry.getKey().getVar(), true);
+//					n = entry.getValue();
+//					b = true;
+//					break;
+//				} else if (entry.getKey().getRight() == n) {
+//					map.put(entry.getKey().getVar(), false);
+//					n = entry.getValue();
+//					b = true;
+//					break;
+//				}
+//			}
+//		}
+//		return map;
+//	}
 	private Map<Variable, Boolean> getModel(final int root) {
 		Map<Variable, Boolean> map = new HashMap<>();
-		int n = 1;
-		for (Map.Entry<BDDNode, Integer> entry : uback.entrySet()) {
-			if(entry.getKey().getLeft()==n) {
-				map.put(entry.getKey().getVar(), true);
-				n = entry.getValue();
-				break;
-			} else if (entry.getKey().getRight()==n){
-				map.put(entry.getKey().getVar(), false);
-				n = entry.getValue();
-				break;
-			}
+		if (root == 1 && root == -1)
+			return map;
+		BDDNode node = expandNode(root);
+		if(node.getLeft()==1) {
+			map.put(node.getVar(), true);
+			return map;
 		}
+		else if (node.getRight() == 1) {
+			map.put(node.getVar(),false);
+			return map;
+		}
+		map = getModel (node.getLeft());
+		if (!map.isEmpty()) {
+			map.put(node.getVar(), true);
+			return map;
+		}
+		map = getModel (node.getRight());
+		if (!map.isEmpty()) {
+			map.put(node.getVar(), false);
+			return map;
+		}
+		map.clear();
 		return map;
+		
+		
 	}
-
 	/**
 	 * Tests if a given BDD is satisfiable.
 	 * 
@@ -228,7 +261,12 @@ public class BDDManager extends Solver {
 	 * @return {@code true} if the BDD is satisfiable, otherwise {@code false}
 	 */
 	private boolean isSAT(final int root) {
-		throw new ToBeImplementedException();
+		if(root == 1)
+			return true;
+		if(root==-1)
+			return false;
+		BDDNode node = expandNode(root);
+		return isSAT(node.getLeft()) || isSAT(node.getRight());
 	}
 
 	/**
@@ -239,7 +277,7 @@ public class BDDManager extends Solver {
 	 * @return {@code true} if the BDD is a tautology, otherwise {@code false}
 	 */
 	private boolean isTautology(final int root) {
-		throw new ToBeImplementedException();
+		return !isSAT(-root);
 	}
 
 	/**
@@ -250,7 +288,7 @@ public class BDDManager extends Solver {
 	 * @return {@code true} if the BDD is a contradiction, otherwise {@code false}
 	 */
 	private boolean isContradiction(final int root) {
-		throw new ToBeImplementedException();
+		return !isSAT(root);
 	}
 
 	@Override
