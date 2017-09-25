@@ -227,7 +227,10 @@ public class BDDManager extends Solver {
 //	}
 	private Map<Variable, Boolean> getModel(final int root) {
 		Map<Variable, Boolean> map = new HashMap<>();
-		if (root == 1 && root == -1)
+		if(false) {
+			
+		}
+		if (root == 1 || root == -1)
 			return map;
 		BDDNode node = expandNode(root);
 		if(node.getLeft()==1) {
