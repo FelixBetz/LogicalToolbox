@@ -47,7 +47,7 @@ public class bddtest2 {
 		//System.out.println(man1.getModel(new Not(new And(new Not(v1),v2))));
 		//System.out.println(man1.getModel(new And(new Not(v1),v2)));
 		//System.out.println(man1.getModel(new Not(v1)));
-		System.out.println(man1.getModel(new And(v1,new Not(v2))));
+		//System.out.println(man1.getModel(new And(v1,new Not(v2))));
 		System.out.println(man1.getModel(new And(new Not(v1),v2)));
 	}
 }
