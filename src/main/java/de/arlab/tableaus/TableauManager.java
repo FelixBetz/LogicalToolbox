@@ -16,21 +16,21 @@ public class TableauManager extends Solver {
 
   @Override
   public boolean isSAT(Formula formula) {
-    throw new ToBeImplementedException();
+	  return ! new Tableau(formula).isClosed();
   }
 
   @Override
   public boolean isSAT(final Set<Clause> clauseSet) {
-    throw new ToBeImplementedException();
+	  return ! new Tableau(Clause.clauses2Formula(clauseSet)).isClosed();
   }
 
   @Override
   public Map<Variable, Boolean> getModel(Formula formula) {
-    throw new ToBeImplementedException();
+    return new Tableau(formula).getModel();
   }
 
   @Override
   public Map<Variable, Boolean> getModel(final Set<Clause> clauseSet) {
-    throw new ToBeImplementedException();
+    return new Tableau(Clause.clauses2Formula(clauseSet)).getModel();
   }
 }

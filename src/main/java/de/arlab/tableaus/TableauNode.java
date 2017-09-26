@@ -6,6 +6,7 @@ import de.arlab.formulas.Formula;
 import de.arlab.formulas.Not;
 import de.arlab.formulas.Or;
 import de.arlab.formulas.Variable;
+import de.arlab.formulas.Verum;
 import de.arlab.util.ToBeImplementedException;
 
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class TableauNode {
 				leftLabel.addAll(label);
 				leftLabel.remove(f);
 				leftLabel.add(((And) f).getLeft());
-				leftLabel.add(((And) f).getRight());		
+				leftLabel.add(((And) f).getRight());
 				left = new TableauNode(leftLabel);
 				break;
 			}
@@ -59,7 +60,7 @@ public class TableauNode {
 				leftLabel.remove(f);
 				leftLabel.add(((Or) f).getLeft());
 				left = new TableauNode(leftLabel);
-				
+
 				List<Formula> rightLabel = new LinkedList<Formula>();
 				rightLabel.addAll(label);
 				rightLabel.remove(f);
@@ -76,11 +77,7 @@ public class TableauNode {
 	 * @return {@code true} if this node is a leaf, otherwise {@code false}
 	 */
 	private boolean isLeaf() {
-		if (left == null && right == null) {
-			return true;
-		} else {
-			return false;
-		}
+		return left == null && right == null;
 	}
 
 	/**
@@ -89,20 +86,19 @@ public class TableauNode {
 	 * @return {@code true} if this node is closed, otherwise {@code false}
 	 */
 	public boolean isClosed() {
-		if(this.left != null && this.right == null) {
-			return  this.left.isClosed();
-		}
-		else if(this.left !=null && this.right != null) {
+		if (this.left != null && this.right == null) {
+			return this.left.isClosed();
+		} else if (this.left != null && this.right != null) {
 			return this.left.isClosed() && this.right.isClosed();
 		}
-		if(this.isLeaf()) {
+		if (this.isLeaf()) {
 			ListIterator<Formula> it = label.listIterator();
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				Formula f = it.next();
-				if(f instanceof Falsum) {
+				if (f instanceof Falsum) {
 					return true;
 				}
-				if(label.contains(new Not(f).simplify())){
+				if (label.contains(new Not(f).simplify())) {
 					return true;
 				}
 			}
@@ -117,7 +113,28 @@ public class TableauNode {
 	 * @return a satisfying assignment or {@code null} if the node is closed
 	 */
 	public Map<Variable, Boolean> getModel() {
-		throw new ToBeImplementedException();
+		Map<Variable, Boolean> model = new HashMap<>();
+		if (this.isClosed()) {
+			return model;
+		}
+		if (this.isLeaf()) {
+			ListIterator<Formula> it = label.listIterator();
+			while (it.hasNext()) {
+				Formula f = it.next();
+				if (f instanceof Variable) {
+					model.put((Variable) f, true);
+				} else if (f instanceof Not) {
+					model.put(((Variable) ((Not) f).getOperand()), false);
+				}
+
+			}
+			return model;
+		}
+
+		if (!this.left.isClosed()) {
+			return  this.left.getModel();
+		}
+		return this.right.getModel();
 	}
 
 	@Override
