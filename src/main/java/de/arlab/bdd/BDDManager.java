@@ -240,7 +240,7 @@ public class BDDManager extends Solver {
 	public Formula toFormula(final Formula formula) {
 		return toFormula(mkBDD(formula));
 	}
-	
+
 	public Formula toFormula(final int root) {
 		if(root==BDD_TRUE)
 			return Formula.VERUM;
@@ -251,6 +251,30 @@ public class BDDManager extends Solver {
 		Formula right = toFormula(node.getRight());
 		Formula var = node.getVar();
 		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
+	}
+
+	public Formula toDNF(final int root) {
+		if(root==BDD_TRUE)
+			return Formula.VERUM;
+		if(root==BDD_FALSE)
+			return Formula.FALSUM;
+		BDDNode node = expandNode(root);
+		Formula left = toFormula(node.getLeft());
+		Formula right = toFormula(node.getRight());
+		Formula var = node.getVar();
+		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
+	}
+
+	public Formula toCNF(final int root) {
+		if(root==BDD_TRUE)
+			return Formula.VERUM;
+		if(root==BDD_FALSE)
+			return Formula.FALSUM;
+		BDDNode node = expandNode(root);
+		Formula left = toFormula(node.getLeft());
+		Formula right = toFormula(node.getRight());
+		Formula var = node.getVar();
+		return new And(new Or(new Not(var), left), new Or(var, right)).simplify();
 	}
 
 	/**
