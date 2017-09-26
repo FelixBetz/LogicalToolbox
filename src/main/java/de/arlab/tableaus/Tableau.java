@@ -43,6 +43,6 @@ public class Tableau {
 
   @Override
   public String toString() {
-    return root.toString();
+    return root.toString() + "-----------------------------";
   }
 }
