@@ -3,7 +3,6 @@ package de.arlab.bdd;
 import de.arlab.formulas.*;
 import de.arlab.sat.Clause;
 import de.arlab.sat.Solver;
-import de.arlab.util.ToBeImplementedException;
 
 import java.util.HashMap;
 import java.util.HashSet;

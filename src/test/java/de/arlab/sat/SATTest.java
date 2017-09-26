@@ -76,6 +76,7 @@ public class SATTest {
   
 	@Test
 	public void testClause() {
+		assertTrue(new DPLLSolver(new TrivialHeuristic()).isSAT(Formula.VERUM));
 		assertEquals(clause1.getFirstLiteral(), null);	
 		clause1.addLiteral(lit1);
 		assertEquals(clause1.getFirstLiteral(), lit1);	

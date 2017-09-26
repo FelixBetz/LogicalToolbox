@@ -248,6 +248,9 @@ public class FormulaTest {
 
 	@Test
 	public void testDNF() {
+		assertEquals(F.falsum, new And(F.f1, F.f2).cnf()); 
+		assertEquals(F.var3, F.f4.simplify());
+		assertTrue(new And(new And(new Or(x1, x2), x3), new And(x1, x4)).dnf().isDNF());
 		assertEquals(dnf.dnf(), dnf);
 		assertEquals(t.dnf(), t);
 		assertEquals(v1.dnf(), v1);
