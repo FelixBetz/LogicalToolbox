@@ -1,6 +1,8 @@
 package de.arlab.bdd;
 
 import de.arlab.formulas.*;
+import de.arlab.formulas.Variable;
+import de.arlab.formulas.Verum;
 import de.arlab.sat.Clause;
 import de.arlab.sat.Solver;
 import de.arlab.util.ToBeImplementedException;
@@ -35,8 +37,9 @@ public class BDDManager extends Solver {
 		computeTable = new HashMap<>();
 		ord = new LinkedList<>();
 	}
-	public Map<Integer, BDDNode> getUnique () {
-		return unique;
+	
+	public List<Variable> getOrd() {
+		return ord;
 	}
 
 	/**
@@ -47,25 +50,33 @@ public class BDDManager extends Solver {
 	 * @return the corresponding BDD (index of root node)
 	 */
 	public int mkBDD(final Formula formula) {
-		if (formula instanceof Verum)
-			return BDD_TRUE;
 		if (formula instanceof Falsum)
 			return BDD_FALSE;
-		if (formula instanceof Variable) {
-			int i = bddVar((Variable) formula);
-			return i;
-		}
-		if (formula instanceof And) {
-			And a = (And) formula;
-			return bddAnd(mkBDD(a.getLeft()), mkBDD(a.getRight()));
-		}
-		if (formula instanceof Or) {
-			Or a = (Or) formula;
-			return bddOr(mkBDD(a.getLeft()), mkBDD(a.getRight()));
-		}
-		Not n = (Not) formula;
-		int i = mkBDD(n.getOperand());
-		return -i;
+		if (formula instanceof Variable)
+			return bddVar((Variable) formula);
+		if (formula instanceof Not)
+			return -mkBDD(((Not) formula).getOperand());
+		if (formula instanceof And)
+			return bddAnd(mkBDD(((And) formula).getLeft()), mkBDD(((And) formula).getRight()));
+		if (formula instanceof Or)
+			return bddOr(mkBDD(((Or) formula).getLeft()), mkBDD(((Or) formula).getRight()));
+		return BDD_TRUE;
+
+	}
+
+	public Formula toFormula(final Formula formula) {
+		return toFormula(mkBDD(formula));
+	}
+
+	public Formula toFormula(int n) {
+		if (n == 1)
+			return Formula.VERUM;
+		if (n == -1)
+			return Formula.FALSUM;
+		BDDNode node = expandNode(n);
+		Formula l = toFormula(node.getLeft());
+		Formula r = toFormula(node.getRight());
+		return new Or(new And(node.getVar(), l), new And(new Not(node.getVar()), r)).simplify();
 	}
 
 	/**
@@ -78,11 +89,10 @@ public class BDDManager extends Solver {
 	 *             if no BDD node was found for the given index, this indicates a
 	 *             faulty implementation
 	 */
-	private BDDNode expandNode(final int n) {
+	public BDDNode expandNode(final int n) {
 		int m = Math.abs(n);
-		if (!unique.containsKey(m)) {
+		if (!unique.containsKey(m))
 			throw new IllegalArgumentException();
-		}
 		BDDNode node = unique.get(m);
 		if (n < 0)
 			return node.complement();
@@ -97,13 +107,14 @@ public class BDDManager extends Solver {
 	 *            the node to lookup and possibly add
 	 * @return the index of the node
 	 */
-	private int lookupUnique(final BDDNode node) {
+	public int lookupUnique(final BDDNode node) {
 		if (uback.containsKey(node))
 			return uback.get(node);
-		uback.put(node, nextIndex);
-		unique.put(nextIndex, node);
-		nextIndex++;
-		return uback.get(node);
+
+		this.unique.put(this.nextIndex, node);
+		this.uback.put(node, this.nextIndex);
+		this.nextIndex++;
+		return this.uback.get(node);
 	}
 
 	/**
@@ -132,17 +143,20 @@ public class BDDManager extends Solver {
 	 * @return the index of the new node
 	 */
 	private int mkNode(final Variable v, final int left, final int right) {
-		if (!ord.contains(v))
-			ord.add(v);
+		if (!this.ord.contains(v)) {
+			this.ord.add(v);
+		}
 		if (left == right)
 			return left;
 		BDDNode node = new BDDNode(v, left, right);
-		if (left < 0) {
-			return -lookupUnique(node.complement());
-		}
-		return lookupUnique(node);
+		int i = 1;
+		if (left < 0)
+			i = lookupUnique(node.complement());
+		if (left > 0)
+			i = lookupUnique(node);
+		return i;
 	}
-
+	
 	/**
 	 * Returns a BDD representing the given variable.
 	 * 
@@ -151,7 +165,7 @@ public class BDDManager extends Solver {
 	 * @return a BDD representing the given variable
 	 */
 	private int bddVar(final Variable v) {
-		return mkNode(v, BDD_TRUE, BDD_FALSE);
+		return mkNode(v, 1, -1);
 	}
 
 	/**
@@ -163,8 +177,8 @@ public class BDDManager extends Solver {
 	 *            the second BDD (index of root node)
 	 * @return the conjunction of m1 and m2 (index of the root node)
 	 */
-	private int bddAnd(final int m1, final int m2) {
-		if ((m1 == BDD_FALSE) || (m2 == BDD_FALSE))
+	public int bddAnd(final int m1, final int m2) {
+		if (m1 == BDD_FALSE || m2 == BDD_FALSE)
 			return BDD_FALSE;
 		if (m1 == BDD_TRUE)
 			return m2;
@@ -175,16 +189,20 @@ public class BDDManager extends Solver {
 		set.add(m2);
 		if (computeTable.containsKey(set))
 			return computeTable.get(set);
+
 		BDDNode node1 = expandNode(m1);
 		BDDNode node2 = expandNode(m2);
-		int i = 0;
-		if (order(node1.getVar(), node2.getVar()))
-			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), m2), bddAnd(node1.getRight(), m2));
-		else if (order(node2.getVar(), node1.getVar()))
-			i = mkNode(node2.getVar(), bddAnd(m1, node2.getLeft()), bddAnd(m1, node2.getRight()));
-		else
+		int i;
+		if (node1.getVar().equals(node2.getVar())) {
 			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), node2.getLeft()),
-					bddAnd(node1.getRight(), node2.getRight()));
+					                   bddAnd(node1.getRight(), node2.getRight()));
+		} else if (order(node1.getVar(), node2.getVar())) {
+			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), m2), 
+					                   bddAnd(node1.getRight(), m2));
+		} else {
+			i = mkNode(node2.getVar(), bddAnd(m1, node2.getLeft()), 
+					                   bddAnd(m1, node2.getRight()));
+		}
 		computeTable.put(set, i);
 		return i;
 	}
@@ -198,8 +216,9 @@ public class BDDManager extends Solver {
 	 *            the second BDD (index of root node)
 	 * @return the disjunction of m1 and m2 (index of root node)
 	 */
-	private int bddOr(final int m1, final int m2) {
-		return -bddAnd(-m1, -m2);
+	public int bddOr(final int m1, final int m2) {
+		int i = bddAnd(-m1, -m2);
+		return -i;
 	}
 
 	/**
@@ -210,47 +229,54 @@ public class BDDManager extends Solver {
 	 *            the BDD
 	 * @return a satisfying variable mapping or {@code null} if none exists
 	 */
+	// private Map<Variable, Boolean> getModel(final int root) {
+	// Map<Variable, Boolean> map = new HashMap<>();
+	// int n = 1;
+	// boolean b = true;
+	// while (b) {
+	// b = false;
+	// for (Map.Entry<BDDNode, Integer> entry : uback.entrySet()) {
+	// if (entry.getKey().getLeft() == n) {
+	// map.put(entry.getKey().getVar(), true);
+	// n = entry.getValue();
+	// b = true;
+	// break;
+	// } else if (entry.getKey().getRight() == n) {
+	// map.put(entry.getKey().getVar(), false);
+	// n = entry.getValue();
+	// b = true;
+	// break;
+	// }
+	// }
+	// }
+	// return map;
+	// }
 	private Map<Variable, Boolean> getModel(final int root) {
-		Map<Variable, Boolean> model = new HashMap<>();
-		if((root==BDD_TRUE)||(root==BDD_FALSE))
-			return model;
+		Map<Variable, Boolean> map = new HashMap<>();
+		if (root == 1 || root == -1)
+			return map;
 		BDDNode node = expandNode(root);
-		if(node.getLeft()==BDD_TRUE) {
-			model.put(node.getVar(), true);
-			return model;
-		} 
-		if(node.getRight()==BDD_TRUE) {
-			model.put(node.getVar(), false);
-			return model;
-		}  
-			
-		model = getModel(node.getLeft());
-		if(!model.isEmpty()) {
-			model.put(node.getVar(), true);
-			return model;
+		if (node.getLeft() == 1) {
+			map.put(node.getVar(), true);
+			return map;
+		} else if (node.getRight() == 1) {
+			map.put(node.getVar(), false);
+			return map;
 		}
-		model = getModel(node.getRight());
-		if(!model.isEmpty()) {
-			model.put(node.getVar(), false);
+		map = getModel(node.getLeft());
+		if (!map.isEmpty()) {
+			map.put(node.getVar(), true);
+			return map;
 		}
-		return model;
-		
-	}
-	
-	public Formula toFormula(final Formula formula) {
-		return toFormula(mkBDD(formula));
-	}
-	
-	private Formula toFormula(final int root) {
-		if(root==BDD_TRUE)
-			return Formula.VERUM;
-		if(root==BDD_FALSE)
-			return Formula.FALSUM;
-		BDDNode node = expandNode(root);
-		Formula left = toFormula(node.getLeft());
-		Formula right = toFormula(node.getRight());
-		Formula var = node.getVar();
-		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
+
+		map = getModel(node.getRight());
+		if (!map.isEmpty()) {
+			map.put(node.getVar(), false);
+			return map;
+		}
+		map.clear();
+		return map;
+
 	}
 
 	/**
@@ -261,9 +287,9 @@ public class BDDManager extends Solver {
 	 * @return {@code true} if the BDD is satisfiable, otherwise {@code false}
 	 */
 	private boolean isSAT(final int root) {
-		if (root == BDD_TRUE)
+		if (root == 1)
 			return true;
-		if (root == BDD_FALSE)
+		if (root == -1)
 			return false;
 		BDDNode node = expandNode(root);
 		return isSAT(node.getLeft()) || isSAT(node.getRight());
