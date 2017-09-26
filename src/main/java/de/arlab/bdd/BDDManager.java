@@ -241,7 +241,7 @@ public class BDDManager extends Solver {
 		return toFormula(mkBDD(formula));
 	}
 	
-	private Formula toFormula(final int root) {
+	public Formula toFormula(final int root) {
 		if(root==BDD_TRUE)
 			return Formula.VERUM;
 		if(root==BDD_FALSE)
