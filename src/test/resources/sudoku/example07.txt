@@ -1,0 +1,6 @@
+c 
+c Sudoku example with base 1
+c
+p sudoku 1
+-
+

@@ -1,0 +1,5 @@
+c 
+c Solution of Sudoku example 07
+c
+p sudoku 1
+1
