@@ -61,6 +61,11 @@ public class Literal {
 		}
 	}
 
+	public Literal(Literal next, boolean phase2) {
+		this.var = next.getVar();
+		this.phase = phase2;
+	}
+
 	/**
 	 * Returns the variable of this literal.
 	 * 

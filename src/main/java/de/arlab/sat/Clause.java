@@ -71,6 +71,13 @@ public class Clause {
 		Collections.addAll(literals, lits);
 	}
 
+	public Clause(Clause other, boolean b) {
+		literals = new HashSet<>();
+		for (Literal literal : other.getLiterals()) {
+			literals.add(new Literal(literal,b));
+		}
+	}
+
 	/**
 	 * Returns the literals of this clause.
 	 * 
@@ -345,5 +352,10 @@ public class Clause {
 		for (Literal l : c.getLiterals())
 			vars.add(l.getVar());
 		return vars;
+	}
+
+	public void negateLiteral(Literal next) {
+		this.literals.remove(next);
+		this.literals.add(next.negate());
 	}
 }

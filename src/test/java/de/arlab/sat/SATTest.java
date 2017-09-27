@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.arlab.formulas.F;
+import de.arlab.cc.CCEncoding;
 import de.arlab.formulas.*;
 import de.arlab.io.DIMACSParser;
 import de.arlab.sat.Clause;
@@ -53,6 +54,7 @@ public class SATTest {
 	private static Clause clause1 = new Clause();
 	private static Clause clause2 = new Clause();
 	private static Clause clause3 = new Clause(lit2);
+	private static Clause clause35 = new Clause(lit2);
 	private static Clause clause4 = new Clause();
 	private static DPLLSolver solver = new DPLLSolver(new TrivialHeuristic());
 
@@ -76,6 +78,9 @@ public class SATTest {
   
 	@Test
 	public void testClause() {
+		clause35.addLiteral(lit3);
+		clause35.addLiteral(lit1);
+		System.out.println(CCEncoding.atMostOne(clause35.getLiterals()));
 		assertTrue(new DPLLSolver(new TrivialHeuristic()).isSAT(Formula.VERUM));
 		assertEquals(clause1.getFirstLiteral(), null);	
 		clause1.addLiteral(lit1);

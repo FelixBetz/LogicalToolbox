@@ -30,6 +30,8 @@ public class bddtest2 {
 		Set<Clause> parsed2 = new DIMACSParser().parse("src/test/resources/profiling/formel2.cnf");
 		assertFalse(new BDDManager().isSAT(parsed1));
 		assertTrue(manager.isSAT(parsed2));
+		assertTrue(manager.isContradiction(Clause.clauses2Formula(parsed1)));
+		assertTrue(manager.isTautology(new Not(Clause.clauses2Formula(parsed1))));
 
 		assertTrue(manager2.isSAT(new Or(F.var1, (new Not(F.var2)))));
 
