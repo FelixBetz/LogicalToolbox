@@ -12,14 +12,16 @@ import de.arlab.bdd.BDDNode;
 import de.arlab.formulas.*;
 import de.arlab.formulas.parser.Parser;
 import de.arlab.io.DIMACSParser;
+import de.arlab.sudoku.SudokuEncoding;
 
-public class BDDTest {
+public class SudokuTest {
 	private static BDDManager manager = new BDDManager();
 	
 	
 	
 	@Test
 	public void testClause() throws IOException {
-		assertTrue(manager.isSAT(new DIMACSParser().parse("test.cnf")));
+		System.out.println(SudokuEncoding.atLeastOneNumEachEntry(2));
+		System.out.println(SudokuEncoding.eachNumAtMostOnceEachRow(2));
 	}
 }
