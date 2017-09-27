@@ -27,7 +27,7 @@ public class CCEncoding {
 	 */
 	public static Set<Clause> atLeastOne(final Collection<Literal> literals) {
 		Set<Clause> set = new HashSet<>();
-		Clause clause = new Clause(new Clause(literals),true);
+		Clause clause = new Clause(new Clause(literals));
 		set.add(clause);
 		return set;
 	}
