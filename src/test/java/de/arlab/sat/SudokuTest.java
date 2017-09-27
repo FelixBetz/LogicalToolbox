@@ -28,13 +28,13 @@ public class SudokuTest {
 	
 	@Test
 	public void testClause() throws IOException {
-		Sudoku spar = new SudokuParser().parse("src/test/resources/sudoku/example06.txt");
+		Sudoku spar = new SudokuParser().parse("src/test/resources/sudoku/example07.txt");
 //		SudokuEncoding.print(spar);
 		Set<Clause> set = SudokuEncoding.encode(spar);
-//		System.out.println(set.size());
+		System.out.println(set);
 		Map<Variable, Boolean> map = new DPLLSolver(new MostCommonVariableHeuristic()).getModel(set);
 		System.out.println(map);
-		Sudoku out = SudokuEncoding.decode(map, 2);
+		Sudoku out = SudokuEncoding.decode(map, 1);
 		SudokuEncoding.print(out);
 	}
 }

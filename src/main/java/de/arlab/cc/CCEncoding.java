@@ -52,7 +52,7 @@ public class CCEncoding {
 			add.negateLiteral(next);
 			set.add(add);
 		}
-		set.add(clause2);
+		if(!(clause.getLiterals().size()<=1)) set.add(clause2);
 	    return set;
 	}
 
