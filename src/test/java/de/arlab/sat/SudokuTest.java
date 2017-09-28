@@ -139,7 +139,10 @@ public class SudokuTest {
 	
 	@Test
 	public void testDpllLeastCommonVariableHeuristic() throws IOException {
-		/*
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//  Sudokus 1-5 (base == 3) können nicht in anehmbarer Zeit gelöst werden
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		/* 
 		// Sudoku1
 		Sudoku spar1 = new SudokuParser().parse("src/test/resources/sudoku/example01.txt");
 		Sudoku spar1Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample01.txt");
@@ -305,49 +308,49 @@ public class SudokuTest {
 		Sudoku spar1 = new SudokuParser().parse("src/test/resources/sudoku/example01.txt");
 		Sudoku spar1Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample01.txt");
 		Set<Clause> set1 = SudokuEncoding.encode(spar1);
-		Map<Variable, Boolean> map1 = new TableauManager().getModel(set1);
+		Map<Variable, Boolean> map1 = new BDDManager().getModel(set1);
 		assertEquals(SudokuEncoding.decode(map1, 3), spar1Sol);
 
 		// Sudoku2
 		Sudoku spar2 = new SudokuParser().parse("src/test/resources/sudoku/example02.txt");
 		Sudoku spar2Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample02.txt");
 		Set<Clause> set2 = SudokuEncoding.encode(spar2);
-		Map<Variable, Boolean> map2 = new TableauManager().getModel(set2);
+		Map<Variable, Boolean> map2 = new BDDManager().getModel(set2);
 		assertEquals(SudokuEncoding.decode(map2, 3), spar2Sol);
 
 		// Sudoku3
 		Sudoku spar3 = new SudokuParser().parse("src/test/resources/sudoku/example03.txt");
 		Sudoku spar3Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample03.txt");
 		Set<Clause> set3 = SudokuEncoding.encode(spar3);
-		Map<Variable, Boolean> map3 = new TableauManager().getModel(set3);
+		Map<Variable, Boolean> map3 = new BDDManager().getModel(set3);
 		assertEquals(SudokuEncoding.decode(map3, 3), spar3Sol);
 
 		// Sudoku4
 		Sudoku spar4 = new SudokuParser().parse("src/test/resources/sudoku/example04.txt");
 		Sudoku spar4Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample04.txt");
 		Set<Clause> set4 = SudokuEncoding.encode(spar4);
-		Map<Variable, Boolean> map4 = new TableauManager().getModel(set4);
+		Map<Variable, Boolean> map4 = new BDDManager().getModel(set4);
 		assertEquals(SudokuEncoding.decode(map4, 3), spar4Sol);
 
 		// Sudoku5
 		Sudoku spar5 = new SudokuParser().parse("src/test/resources/sudoku/example05.txt");
 		Sudoku spar5Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample05.txt");
 		Set<Clause> set5 = SudokuEncoding.encode(spar5);
-		Map<Variable, Boolean> map5 = new TableauManager().getModel(set5);
+		Map<Variable, Boolean> map5 = new BDDManager().getModel(set5);
 		assertEquals(SudokuEncoding.decode(map5, 3), spar5Sol);
-
+*/
 		// Sudoku6
 		Sudoku spar6 = new SudokuParser().parse("src/test/resources/sudoku/example06.txt");
 		Sudoku spar6Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample06.txt");
 		Set<Clause> set6 = SudokuEncoding.encode(spar6);
-		Map<Variable, Boolean> map6 = new TableauManager().getModel(set6);
+		Map<Variable, Boolean> map6 = new BDDManager().getModel(set6);
 		assertEquals(SudokuEncoding.decode(map6, 2), spar6Sol);
-*/
+
 		// Sudoku7
 		Sudoku spar7 = new SudokuParser().parse("src/test/resources/sudoku/example07.txt");
 		Sudoku spar7Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample07.txt");
 		Set<Clause> set7 = SudokuEncoding.encode(spar7);
-		Map<Variable, Boolean> map7 = new TableauManager().getModel(set7);
+		Map<Variable, Boolean> map7 = new BDDManager().getModel(set7);
 		assertEquals(SudokuEncoding.decode(map7, 1), spar7Sol);
 
 	}
