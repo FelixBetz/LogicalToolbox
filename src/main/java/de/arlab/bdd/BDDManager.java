@@ -1,4 +1,4 @@
-package de.arlab.bdd;
+	package de.arlab.bdd;
 
 import de.arlab.formulas.*;
 import de.arlab.sat.Clause;
