@@ -25,6 +25,7 @@ public class TableauNode {
 	private final List<Formula> label;
 	private TableauNode left;
 	private TableauNode right;
+	
 
 	/**
 	 * Constructor for a tableau node.
@@ -42,7 +43,6 @@ public class TableauNode {
 	 */
 	private void createChildren() {
 		ListIterator<Formula> it = label.listIterator();
-
 		while (it.hasNext()) {
 			Formula f = it.next();
 			if (f instanceof And) {
