@@ -2,10 +2,12 @@
 
 import de.arlab.formulas.*;
 import de.arlab.sat.Clause;
+import de.arlab.sat.Literal;
 import de.arlab.sat.Solver;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +36,7 @@ public class BDDManager extends Solver {
 		computeTable = new HashMap<>();
 		ord = new LinkedList<>();
 	}
-	public Map<Integer, BDDNode> getUnique () {
-		return unique;
-	}
-
+	
 	/**
 	 * Computes the BDD for a given formula.
 	 * 
@@ -67,6 +66,33 @@ public class BDDManager extends Solver {
 		return -i;
 	}
 
+	private int mkBDD(final Literal literal) {
+		if(literal.getPhase()) 
+			return bddVar(literal.getVar());
+		return -bddVar(literal.getVar());
+	}
+	
+	private int mkBDD(final Clause clause) {
+		if(clause.isEmpty()) 
+			return -1;
+		Iterator<Literal> it = clause.getLiterals().iterator();
+		Literal lit = it.next();
+		int i = mkBDD(lit);
+		while(it.hasNext()) {
+			i = bddOr(i,mkBDD(it.next()));
+		}
+		return i;
+	}
+	
+	public int mkBDD(final Set<Clause> clauses) {
+		if (clauses.isEmpty()) 
+			return -1;
+		Iterator<Clause> it = clauses.iterator();
+		int i=mkBDD(it.next());
+		while(it.hasNext())
+			i = bddAnd(i, mkBDD(it.next()));
+		return i;
+	}
 	/**
 	 * Returns the corresponding BDD node for a given index.
 	 * 
@@ -235,22 +261,6 @@ public class BDDManager extends Solver {
 		return model;
 		
 	}
-	
-	public Formula toFormula(final Formula formula) {
-		return toFormula(mkBDD(formula));
-	}
-
-	public Formula toFormula(final int root) {
-		if(root==BDD_TRUE)
-			return Formula.VERUM;
-		if(root==BDD_FALSE)
-			return Formula.FALSUM;
-		BDDNode node = expandNode(root);
-		Formula left = toFormula(node.getLeft());
-		Formula right = toFormula(node.getRight());
-		Formula var = node.getVar();
-		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
-	}
 
 	public Formula toDNF(final int root) {
 		if(root==BDD_TRUE)
@@ -258,8 +268,8 @@ public class BDDManager extends Solver {
 		if(root==BDD_FALSE)
 			return Formula.FALSUM;
 		BDDNode node = expandNode(root);
-		Formula left = toFormula(node.getLeft());
-		Formula right = toFormula(node.getRight());
+		Formula left = toDNF(node.getLeft());
+		Formula right = toDNF(node.getRight());
 		Formula var = node.getVar();
 		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
 	}
@@ -270,12 +280,19 @@ public class BDDManager extends Solver {
 		if(root==BDD_FALSE)
 			return Formula.FALSUM;
 		BDDNode node = expandNode(root);
-		Formula left = toFormula(node.getLeft());
-		Formula right = toFormula(node.getRight());
+		Formula left = toCNF(node.getLeft());
+		Formula right = toCNF(node.getRight());
 		Formula var = node.getVar();
 		return new And(new Or(new Not(var), left), new Or(var, right)).simplify();
 	}
 
+	public Formula toCNF(final Formula formula) {
+		return toCNF(mkBDD(formula));
+	}
+
+	public Formula toDNF(final Formula formula) {
+		return toDNF(mkBDD(formula));
+	}
 	/**
 	 * Tests if a given BDD is satisfiable.
 	 * 
@@ -331,7 +348,7 @@ public class BDDManager extends Solver {
 
 	@Override
 	public Map<Variable, Boolean> getModel(final Set<Clause> clauseSet) {
-		return getModel(Clause.clauses2Formula(clauseSet));
+		return getModel(mkBDD(clauseSet));
 	}
 
 	@Override
