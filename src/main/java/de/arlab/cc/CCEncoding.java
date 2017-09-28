@@ -47,8 +47,10 @@ public class CCEncoding {
 		List<Literal> list = new ArrayList<>();
 		list.addAll(literals);
 		int l = list.size();
+		
 		for(int i=0; i<l; i++) {
 			Literal lit = list.get(i).negate();
+			
 			Iterator<Literal> it = list.subList(i+1, l).iterator();
 			while (it.hasNext()) {
 				Literal next = it.next().negate();

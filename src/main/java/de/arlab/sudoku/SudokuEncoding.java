@@ -86,12 +86,13 @@ public class SudokuEncoding {
 	 * @return the respective constraints as a set of clauses
 	 */
 	public static Set<Clause> atLeastOneNumEachEntry(final int base) {
+		int b = base*base;
 		Set<Clause> clauses = new HashSet<>();
 
-		for (int row = 1; row <= base; row++) {
-			for (int col = 1; col <= base; col++) {
+		for (int row = 1; row <= b; row++) {
+			for (int col = 1; col <= b; col++) {
 				Set<Literal> set = new HashSet<>();
-				for (int n = 1; n <= base; n++) {
+				for (int n = 1; n <= b; n++) {
 					set.add(posLit(row, col, n));
 				}
 				clauses.addAll(CCEncoding.atLeastOne(set));
