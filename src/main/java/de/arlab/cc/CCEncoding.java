@@ -43,20 +43,19 @@ public class CCEncoding {
 	 * @return clauses of the cardinality constraint encoding
 	 */
 	public static Set<Clause> atMostOne(final Collection<Literal> literals) {
-		Clause clause = new Clause(new Clause(literals),false);
-		Set<Clause> set = new HashSet<>();
-		set.add(clause);
-		Iterator<Literal> it = clause.getLiterals().iterator();
-		while (it.hasNext()) {
-			Set<Clause> dings = Clause.copyClauseSet(set);
-			Variable var = it.next().getVar();
-			Iterator<Clause> innerIt = dings.iterator();
-			while (innerIt.hasNext()) {
-				innerIt.next().positiveLit(var);
+		Set<Clause> clauses= new HashSet<>();
+		List<Literal> list = new ArrayList<>();
+		list.addAll(literals);
+		int l = list.size();
+		for(int i=0; i<l; i++) {
+			Literal lit = list.get(i).negate();
+			Iterator<Literal> it = list.subList(i+1, l).iterator();
+			while (it.hasNext()) {
+				Literal next = it.next().negate();
+				clauses.add(new Clause(lit, next));
 			}
-			set.addAll(dings);
 		}
-	    return set;
+		return clauses;
 	}
 
 	/**
