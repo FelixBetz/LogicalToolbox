@@ -358,4 +358,18 @@ public class Clause {
 		this.literals.remove(next);
 		this.literals.add(next.negate());
 	}
+
+	public void positiveLit(Variable var) {
+		this.literals.remove(new Literal(var,false));
+		this.literals.add(new Literal(var,true));
+	}
+	
+	public int numberOfPosPhases() {
+		int n=0;
+		Iterator<Literal> it = this.literals.iterator();
+		while(it.hasNext())
+			if(it.next().getPhase())
+				n++;
+		return n;
+	}
 }

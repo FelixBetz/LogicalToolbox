@@ -1,5 +1,6 @@
 package de.arlab.cc;
 
+import de.arlab.formulas.Variable;
 import de.arlab.sat.Clause;
 import de.arlab.sat.Literal;
 import de.arlab.util.ToBeImplementedException;
@@ -43,16 +44,18 @@ public class CCEncoding {
 	 */
 	public static Set<Clause> atMostOne(final Collection<Literal> literals) {
 		Clause clause = new Clause(new Clause(literals),false);
-		Clause clause2 = new Clause(new Clause(literals),false);
 		Set<Clause> set = new HashSet<>();
+		set.add(clause);
 		Iterator<Literal> it = clause.getLiterals().iterator();
-		while(it.hasNext()) {
-			Literal next = it.next();
-			Clause add = new Clause(clause2);
-			add.negateLiteral(next);
-			set.add(add);
+		while (it.hasNext()) {
+			Set<Clause> dings = Clause.copyClauseSet(set);
+			Variable var = it.next().getVar();
+			Iterator<Clause> innerIt = dings.iterator();
+			while (innerIt.hasNext()) {
+				innerIt.next().positiveLit(var);
+			}
+			set.addAll(dings);
 		}
-		if(!(clause.getLiterals().size()<=1)) set.add(clause2);
 	    return set;
 	}
 
