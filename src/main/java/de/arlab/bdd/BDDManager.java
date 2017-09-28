@@ -36,7 +36,7 @@ public class BDDManager extends Solver {
 		computeTable = new HashMap<>();
 		ord = new LinkedList<>();
 	}
-	
+
 	/**
 	 * Computes the BDD for a given formula.
 	 * 
@@ -66,33 +66,55 @@ public class BDDManager extends Solver {
 		return -i;
 	}
 
+	/**
+	 * Computes the BDD for a given literal
+	 * 
+	 * @param literal
+	 *            the literal
+	 * @return the corresponding BDD (index of root node)
+	 */
 	private int mkBDD(final Literal literal) {
-		if(literal.getPhase()) 
+		if (literal.getPhase()) // positive literal leads to just a variable
 			return bddVar(literal.getVar());
 		return -bddVar(literal.getVar());
 	}
-	
+
+	/**
+	 * Computes the BDD for a given clause .
+	 * 
+	 * @param clause
+	 *            the clause
+	 * @return the corresponding BDD (index of root node)
+	 */
 	private int mkBDD(final Clause clause) {
-		if(clause.isEmpty()) 
+		if (clause.isEmpty())
 			return -1;
 		Iterator<Literal> it = clause.getLiterals().iterator();
 		Literal lit = it.next();
 		int i = mkBDD(lit);
-		while(it.hasNext()) {
-			i = bddOr(i,mkBDD(it.next()));
+		while (it.hasNext()) {
+			i = bddOr(i, mkBDD(it.next()));
 		}
 		return i;
 	}
-	
+
+	/**
+	 * Computes the BDD for a given clause set.
+	 * 
+	 * @param clauses
+	 *            the set of clauses
+	 * @return the corresponding BDD (index of root node)
+	 */
 	public int mkBDD(final Set<Clause> clauses) {
-		if (clauses.isEmpty()) 
+		if (clauses.isEmpty())
 			return -1;
 		Iterator<Clause> it = clauses.iterator();
-		int i=mkBDD(it.next());
-		while(it.hasNext())
+		int i = mkBDD(it.next());
+		while (it.hasNext())
 			i = bddAnd(i, mkBDD(it.next()));
 		return i;
 	}
+
 	/**
 	 * Returns the corresponding BDD node for a given index.
 	 * 
@@ -157,12 +179,12 @@ public class BDDManager extends Solver {
 	 * @return the index of the new node
 	 */
 	private int mkNode(final Variable v, final int left, final int right) {
-		if (!ord.contains(v))
+		if (!ord.contains(v)) // if the variable isnt already in the variable order, add it
 			ord.add(v);
-		if (left == right)
+		if (left == right) 
 			return left;
 		BDDNode node = new BDDNode(v, left, right);
-		if (left < 0) {
+		if (left < 0) { 
 			return -lookupUnique(node.complement());
 		}
 		return lookupUnique(node);
@@ -198,7 +220,7 @@ public class BDDManager extends Solver {
 		Set<Integer> set = new HashSet<>();
 		set.add(m1);
 		set.add(m2);
-		if (computeTable.containsKey(set))
+		if (computeTable.containsKey(set)) // if the conjunction already happened just use the result of that.
 			return computeTable.get(set);
 		BDDNode node1 = expandNode(m1);
 		BDDNode node2 = expandNode(m2);
@@ -207,7 +229,7 @@ public class BDDManager extends Solver {
 			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), m2), bddAnd(node1.getRight(), m2));
 		else if (order(node2.getVar(), node1.getVar()))
 			i = mkNode(node2.getVar(), bddAnd(m1, node2.getLeft()), bddAnd(m1, node2.getRight()));
-		else
+		else // both vars equal.
 			i = mkNode(node1.getVar(), bddAnd(node1.getLeft(), node2.getLeft()),
 					bddAnd(node1.getRight(), node2.getRight()));
 		computeTable.put(set, i);
@@ -224,7 +246,7 @@ public class BDDManager extends Solver {
 	 * @return the disjunction of m1 and m2 (index of root node)
 	 */
 	private int bddOr(final int m1, final int m2) {
-		return -bddAnd(-m1, -m2);
+		return -bddAnd(-m1, -m2); // m1 or m2 == not (not m1 and not m2)
 	}
 
 	/**
@@ -237,35 +259,42 @@ public class BDDManager extends Solver {
 	 */
 	private Map<Variable, Boolean> getModel(final int root) {
 		Map<Variable, Boolean> model = new HashMap<>();
-		if((root==BDD_TRUE)||(root==BDD_FALSE))
+		if ((root == BDD_TRUE) || (root == BDD_FALSE))
 			return model;
 		BDDNode node = expandNode(root);
-		if(node.getLeft()==BDD_TRUE) {
+		if (node.getLeft() == BDD_TRUE) {
 			model.put(node.getVar(), true);
 			return model;
-		} 
-		if(node.getRight()==BDD_TRUE) {
+		}
+		if (node.getRight() == BDD_TRUE) {
 			model.put(node.getVar(), false);
 			return model;
-		}  
-			
+		}
+
 		model = getModel(node.getLeft());
-		if(!model.isEmpty()) {
+		if (!model.isEmpty()) {
 			model.put(node.getVar(), true);
 			return model;
 		}
 		model = getModel(node.getRight());
-		if(!model.isEmpty()) {
+		if (!model.isEmpty()) {
 			model.put(node.getVar(), false);
 		}
 		return model;
-		
+
 	}
 
-	public Formula toDNF(final int root) {
-		if(root==BDD_TRUE)
+	/**
+	 * Create the DNF of a formula
+	 * 
+	 * @param root
+	 *            the root of a formula in a BDD
+	 * @return the dnf of the formula
+	 */
+	private Formula toDNF(final int root) {
+		if (root == BDD_TRUE)
 			return Formula.VERUM;
-		if(root==BDD_FALSE)
+		if (root == BDD_FALSE)
 			return Formula.FALSUM;
 		BDDNode node = expandNode(root);
 		Formula left = toDNF(node.getLeft());
@@ -274,10 +303,17 @@ public class BDDManager extends Solver {
 		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
 	}
 
-	public Formula toCNF(final int root) {
-		if(root==BDD_TRUE)
+	/**
+	 * Create the CNF of a formula
+	 * 
+	 * @param root
+	 *            the root of a formula in a BDD
+	 * @return the cnf of the formula
+	 */
+	private Formula toCNF(final int root) {
+		if (root == BDD_TRUE)
 			return Formula.VERUM;
-		if(root==BDD_FALSE)
+		if (root == BDD_FALSE)
 			return Formula.FALSUM;
 		BDDNode node = expandNode(root);
 		Formula left = toCNF(node.getLeft());
@@ -286,13 +322,28 @@ public class BDDManager extends Solver {
 		return new And(new Or(new Not(var), left), new Or(var, right)).simplify();
 	}
 
+	/**
+	 * Convert a formula into its CNF
+	 * 
+	 * @param formula
+	 *            a random formula
+	 * @return the dnf of the formula
+	 */
 	public Formula toCNF(final Formula formula) {
 		return toCNF(mkBDD(formula));
 	}
 
+	/**
+	 * Convert a formula into its DNF
+	 * 
+	 * @param formula
+	 *            a random formula
+	 * @return the dnf of the formula
+	 */
 	public Formula toDNF(final Formula formula) {
 		return toDNF(mkBDD(formula));
 	}
+
 	/**
 	 * Tests if a given BDD is satisfiable.
 	 * 
