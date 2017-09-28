@@ -336,7 +336,7 @@ public class SudokuTest {
 		Map<Variable, Boolean> map5 = new TableauManager().getModel(set5);
 		assertEquals(SudokuEncoding.decode(map5, 3), spar5Sol);
 
-		// Sudoku6
+		// Sudoku6//
 		Sudoku spar6 = new SudokuParser().parse("src/test/resources/sudoku/example06.txt");
 		Sudoku spar6Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample06.txt");
 		Set<Clause> set6 = SudokuEncoding.encode(spar6);
