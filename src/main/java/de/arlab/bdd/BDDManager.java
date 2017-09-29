@@ -1,10 +1,11 @@
-	package de.arlab.bdd;
+package de.arlab.bdd;
 
 import de.arlab.formulas.*;
 import de.arlab.sat.Clause;
 import de.arlab.sat.Literal;
 import de.arlab.sat.Solver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -181,10 +182,10 @@ public class BDDManager extends Solver {
 	private int mkNode(final Variable v, final int left, final int right) {
 		if (!ord.contains(v)) // if the variable isnt already in the variable order, add it
 			ord.add(v);
-		if (left == right) 
+		if (left == right)
 			return left;
 		BDDNode node = new BDDNode(v, left, right);
-		if (left < 0) { 
+		if (left < 0) {
 			return -lookupUnique(node.complement());
 		}
 		return lookupUnique(node);
@@ -292,15 +293,66 @@ public class BDDManager extends Solver {
 	 * @return the dnf of the formula
 	 */
 	private Formula toDNF(final int root) {
-		if (root == BDD_TRUE)
-			return Formula.VERUM;
-		if (root == BDD_FALSE)
+		List<List<Formula>> liste = paths(root);
+		Iterator<List<Formula>> it = liste.iterator();
+		Formula f = listConjunction(it.next());
+		while(it.hasNext()) {
+			f = new Or(f,listConjunction(it.next()));
+		}
+		return f.simplify();
+	}
+	
+	private Formula listConjunction(List<Formula> next) {
+		Iterator<Formula> it = next.iterator();
+		Formula f = it.next();
+		if(f instanceof Falsum)
 			return Formula.FALSUM;
+		while(it.hasNext()) {
+			f = new And(f,it.next());
+		}
+		return f.simplify();
+	}
+	
+	private Formula listDisjunction(List<Formula> next) {
+		Iterator<Formula> it = next.iterator();
+		Formula f = it.next();
+		if(f instanceof Verum)
+			return Formula.VERUM;
+		while(it.hasNext()) {
+			f = new Or(f,it.next());
+		}
+		return f.simplify();
+	}
+
+	
+	public List<List<Formula>> paths(final int root) {
+		List<List<Formula>> gesamtListe = new ArrayList<>();
+		if (root == 1) {
+			List<Formula> path = new ArrayList<>();
+			path.add(Formula.VERUM);
+			gesamtListe.add(path);
+			return gesamtListe;
+		}
+		if (root == -1) {
+			List<Formula> path = new ArrayList<>();
+			path.add(Formula.FALSUM);
+			gesamtListe.add(path);
+			return gesamtListe;
+		}
 		BDDNode node = expandNode(root);
-		Formula left = toDNF(node.getLeft());
-		Formula right = toDNF(node.getRight());
-		Formula var = node.getVar();
-		return new Or(new And(var, left), new And(new Not(var), right)).simplify();
+		List<List<Formula>> left = paths(node.getLeft());
+		List<List<Formula>> right = paths(node.getRight());
+		Iterator<List<Formula>> it = left.iterator();
+		while(it.hasNext()) {
+			it.next().add(node.getVar());
+		}
+		gesamtListe.addAll(left);
+		it = right.iterator();
+		while(it.hasNext()) {
+			it.next().add(new Not(node.getVar()));
+		}
+		gesamtListe.addAll(right);
+		return gesamtListe;		
 	}
 
 	/**
@@ -311,15 +363,13 @@ public class BDDManager extends Solver {
 	 * @return the cnf of the formula
 	 */
 	private Formula toCNF(final int root) {
-		if (root == BDD_TRUE)
-			return Formula.VERUM;
-		if (root == BDD_FALSE)
-			return Formula.FALSUM;
-		BDDNode node = expandNode(root);
-		Formula left = toCNF(node.getLeft());
-		Formula right = toCNF(node.getRight());
-		Formula var = node.getVar();
-		return new And(new Or(new Not(var), left), new Or(var, right)).simplify();
+		List<List<Formula>> liste = paths(root);
+		Iterator<List<Formula>> it = liste.iterator();
+		Formula f = listDisjunction(it.next());
+		while(it.hasNext()) {
+			f = new And(f,listDisjunction(it.next()));
+		}
+		return f.simplify();
 	}
 
 	/**

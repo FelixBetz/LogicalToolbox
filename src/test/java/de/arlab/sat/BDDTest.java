@@ -62,17 +62,17 @@ public class BDDTest {
 		assertFalse(manager.isContradiction(Clause.clauses2Formula(parsed2)));
 		assertTrue(manager.isTautology(new Not(Clause.clauses2Formula(parsed1))));
 		assertFalse(manager.isTautology(new Not(Clause.clauses2Formula(parsed2))));
-		assertEquals(f1,manager.toDNF(f1));
-		assertEquals(f1cnf,manager.toCNF(f1));
-		// model of a formula and its cnf should be the same.
-		assertEquals(map1, manager.getModel(f1));
-		assertEquals(map1, manager.getModel(f1cnf));
-		// the model is empty if the formula is Contradiction or tautology
+//		assertEquals(f1,manager.toDNF(f1));
+//		assertEquals(f1cnf,manager.toCNF(f1));
+//		// model of a formula and its cnf should be the same.
+//		assertEquals(map1, manager.getModel(f1));
+//		assertEquals(map1, manager.getModel(f1cnf));
+//		// the model is empty if the formula is Contradiction or tautology
 		assertEquals(new HashMap<>(), manager.getModel(F.verum));
 		assertEquals(new HashMap<>(), manager.getModel(F.falsum));
 		assertEquals(new HashMap<>(), manager.getModel(new Or(x1, nx1)));
 		assertEquals(new HashMap<>(), manager.getModel(new And(x1, nx1)));
-		System.out.println(manager.toCNF(f2).isCNF());
+		System.out.println(new BDDManager().toCNF(new And(x3,new Not(new And(x1,x2)))));
 
 	}
 }

@@ -16,6 +16,8 @@ import java.util.Set;
  * Methods for encoding cardinality constraints of different types.
  */
 public class CCEncoding {
+	// The way we use those methods we „feed“ them with literals with positive
+	// phase, so we assume that the literals we get in here are positive
 
 	/**
 	 * Encodes an at-least-one constraint: {@code \sum_(i=1)^n l_i >= 1.}
@@ -28,8 +30,7 @@ public class CCEncoding {
 	 */
 	public static Set<Clause> atLeastOne(final Collection<Literal> literals) {
 		Set<Clause> set = new HashSet<>();
-		Clause clause = new Clause(new Clause(literals));
-		set.add(clause);
+		set.add(new Clause(literals)); // "at least one" is a simple "or", so we just build one clause.
 		return set;
 	}
 
@@ -43,15 +44,15 @@ public class CCEncoding {
 	 * @return clauses of the cardinality constraint encoding
 	 */
 	public static Set<Clause> atMostOne(final Collection<Literal> literals) {
-		Set<Clause> clauses= new HashSet<>();
+		Set<Clause> clauses = new HashSet<>();
 		List<Literal> list = new ArrayList<>();
 		list.addAll(literals);
 		int l = list.size();
-		
-		for(int i=0; i<l; i++) {
+		// combine the negated literal pairwise with the literals (again negated) that
+		// follow in that list.
+		for (int i = 0; i < l; i++) {
 			Literal lit = list.get(i).negate();
-			
-			Iterator<Literal> it = list.subList(i+1, l).iterator();
+			Iterator<Literal> it = list.subList(i + 1, l).iterator();
 			while (it.hasNext()) {
 				Literal next = it.next().negate();
 				clauses.add(new Clause(lit, next));
@@ -70,7 +71,8 @@ public class CCEncoding {
 	 * @return clauses of the cardinality constraint encoding
 	 */
 	public static Set<Clause> exactlyOne(final Collection<Literal> literals) {
-		Set<Clause> set= atMostOne(literals);
+		// (if x>=1 and x<=1 then it must be x==1), so we use the two former constraints
+		Set<Clause> set = atMostOne(literals);
 		set.addAll(atLeastOne(literals));
 		return set;
 	}
