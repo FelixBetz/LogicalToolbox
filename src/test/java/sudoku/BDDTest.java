@@ -29,15 +29,17 @@ public class BDDTest {
 	private static Formula x1 = F.var1;
 	private static Formula nx1 = new Not(F.var1);
 	private static Formula x2 = F.var2;
+	private static Formula nx2 = new Not(F.var2);
 	private static Formula x3 = F.var3;
 	private static Formula x4 = F.var4;
 	private static Formula x5 = F.var5;
 	@BeforeClass
 	public static void initialize() {
-		f1 = new And(nx1, x2);
-		f1cnf = new And(nx1, new Or(x1,x2));
+		f1 = new And(x2, nx1);
+		f1cnf = new And(nx1, new Or(x2,x1));
 		f2 = new Or(x3, f1);
-		f2cnf = new And(new Or(nx1,x3),new Or(x1, new Or(x2,x3)));
+		f2dnf = new Or(new Or(new And(x3,x1), new And(x2,nx1)), new And(new And(x3,nx2),nx1));
+		f2cnf = new And(new Or(x3,nx1), new Or(new Or(x3,x2),x1));
 		map1 = new HashMap<>();
 		map1.put(F.var1, false);
 		map1.put(F.var2, true);
@@ -63,17 +65,18 @@ public class BDDTest {
 		assertFalse(manager.isContradiction(Clause.clauses2Formula(parsed2)));
 		assertTrue(manager.isTautology(new Not(Clause.clauses2Formula(parsed1))));
 		assertFalse(manager.isTautology(new Not(Clause.clauses2Formula(parsed2))));
-//		assertEquals(f1,manager.toDNF(f1));
-//		assertEquals(f1cnf,manager.toCNF(f1));
-//		// model of a formula and its cnf should be the same.
-//		assertEquals(map1, manager.getModel(f1));
-//		assertEquals(map1, manager.getModel(f1cnf));
-//		// the model is empty if the formula is Contradiction or tautology
+		assertEquals(f1,manager.toDNF(f1));
+		assertEquals(f1cnf,manager.toCNF(f1));
+		assertEquals(f2dnf, manager.toDNF(f2));
+		assertEquals(f2cnf, manager.toCNF(f2));
+		// model of a formula and its cnf should be the same.
+		assertEquals(map1, manager.getModel(f1));
+		assertEquals(map1, manager.getModel(f1cnf));
+		// the model is empty if the formula is Contradiction or tautology
 		assertEquals(new HashMap<>(), manager.getModel(F.verum));
 		assertEquals(new HashMap<>(), manager.getModel(F.falsum));
 		assertEquals(new HashMap<>(), manager.getModel(new Or(x1, nx1)));
 		assertEquals(new HashMap<>(), manager.getModel(new And(x1, nx1)));
-		System.out.println(new BDDManager().toCNF(new And(x3,new Not(new And(x1,x2)))));
 
 	}
 }

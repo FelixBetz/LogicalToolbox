@@ -296,35 +296,55 @@ public class BDDManager extends Solver {
 		List<List<Formula>> liste = paths(root);
 		Iterator<List<Formula>> it = liste.iterator();
 		Formula f = listConjunction(it.next());
-		while(it.hasNext()) {
-			f = new Or(f,listConjunction(it.next()));
-		}
-		return f.simplify();
-	}
-	
-	private Formula listConjunction(List<Formula> next) {
-		Iterator<Formula> it = next.iterator();
-		Formula f = it.next();
-		if(f instanceof Falsum)
-			return Formula.FALSUM;
-		while(it.hasNext()) {
-			f = new And(f,it.next());
-		}
-		return f.simplify();
-	}
-	
-	private Formula listDisjunction(List<Formula> next) {
-		Iterator<Formula> it = next.iterator();
-		Formula f = it.next();
-		if(f instanceof Verum)
-			return Formula.VERUM;
-		while(it.hasNext()) {
-			f = new Or(f,it.next());
+		while (it.hasNext()) {
+			f = new Or(f, listConjunction(it.next()));
 		}
 		return f.simplify();
 	}
 
-	
+	/**
+	 * Conjunct all paths beginning wth a verum
+	 * 
+	 * @param next
+	 *            a list of formulas
+	 * @return a formula
+	 */
+	private Formula listConjunction(List<Formula> next) {
+		Iterator<Formula> it = next.iterator();
+		Formula f = it.next();
+		if (f instanceof Falsum)
+			return Formula.FALSUM;
+		while (it.hasNext()) {
+			f = new And(f, it.next());
+		}
+		return f.simplify();
+	}
+
+	/**
+	 * Disjunct all paths beginning with a falsum, negate the variables
+	 * 
+	 * @param next
+	 *            a list of formulas
+	 * @return a formula
+	 */
+	private Formula listDisjunction(List<Formula> next) {
+		Iterator<Formula> it = next.iterator();
+		Formula f = it.next();
+		if (f instanceof Verum)
+			return Formula.VERUM;
+		while (it.hasNext()) {
+			f = new Or(f, new Not(it.next()));
+		}
+		return f.simplify();
+	}
+
+	/**
+	 * collect all paths in a bdd
+	 * 
+	 * @param root
+	 *            the root of the bdd
+	 * @return List of lists all paths in a bdd
+	 */
 	public List<List<Formula>> paths(final int root) {
 		List<List<Formula>> gesamtListe = new ArrayList<>();
 		if (root == 1) {
@@ -343,16 +363,16 @@ public class BDDManager extends Solver {
 		List<List<Formula>> left = paths(node.getLeft());
 		List<List<Formula>> right = paths(node.getRight());
 		Iterator<List<Formula>> it = left.iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			it.next().add(node.getVar());
 		}
 		gesamtListe.addAll(left);
 		it = right.iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			it.next().add(new Not(node.getVar()));
 		}
 		gesamtListe.addAll(right);
-		return gesamtListe;		
+		return gesamtListe;
 	}
 
 	/**
@@ -366,8 +386,8 @@ public class BDDManager extends Solver {
 		List<List<Formula>> liste = paths(root);
 		Iterator<List<Formula>> it = liste.iterator();
 		Formula f = listDisjunction(it.next());
-		while(it.hasNext()) {
-			f = new And(f,listDisjunction(it.next()));
+		while (it.hasNext()) {
+			f = new And(f, listDisjunction(it.next()));
 		}
 		return f.simplify();
 	}
