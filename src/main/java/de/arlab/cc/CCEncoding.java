@@ -28,7 +28,7 @@ public class CCEncoding {
 	 */
 	public static Set<Clause> atLeastOne(final Collection<Literal> literals) {
 		Set<Clause> set = new HashSet<>();
-		Clause clause = new Clause(new Clause(literals));
+		Clause clause = new Clause(new Clause(literals));   //literal1 Or literal2 OR.....
 		set.add(clause);
 		return set;
 	}
@@ -54,7 +54,7 @@ public class CCEncoding {
 			Iterator<Literal> it = list.subList(i+1, l).iterator();
 			while (it.hasNext()) {
 				Literal next = it.next().negate();
-				clauses.add(new Clause(lit, next));
+				clauses.add(new Clause(lit, next));         //!(x_i And x_j) <=> !x_i OR !x_j
 			}
 		}
 		return clauses;
@@ -69,8 +69,8 @@ public class CCEncoding {
 	 *            literals where exactly one has to hold
 	 * @return clauses of the cardinality constraint encoding
 	 */
-	public static Set<Clause> exactlyOne(final Collection<Literal> literals) {
-		Set<Clause> set= atMostOne(literals);
+	public static Set<Clause> exactlyOne(final Collection<Literal> literals) { 
+		Set<Clause> set= atMostOne(literals);  //combine atMostOne and atLeastOne
 		set.addAll(atLeastOne(literals));
 		return set;
 	}
