@@ -1,4 +1,4 @@
-package de.arlab.sat;
+package sudoku;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import de.arlab.bdd.BDDManager;
 import de.arlab.bdd.BDDNode;
 import de.arlab.formulas.*;
 import de.arlab.io.DIMACSParser;
+import de.arlab.sat.Clause;
 
 public class BDDTest {
 	private static BDDManager manager = new BDDManager();

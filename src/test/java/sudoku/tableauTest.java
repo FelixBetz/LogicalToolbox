@@ -1,4 +1,4 @@
-package de.arlab.sat;
+package sudoku;
 
 import static org.junit.Assert.*;
 
