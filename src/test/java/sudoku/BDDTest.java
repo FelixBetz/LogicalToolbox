@@ -1,4 +1,4 @@
-package sudoku;
+	package sudoku;
 
 import static org.junit.Assert.*;
 
