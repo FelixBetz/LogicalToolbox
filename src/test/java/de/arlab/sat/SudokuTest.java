@@ -182,6 +182,7 @@ public class SudokuTest {
 		Sudoku spar6 = new SudokuParser().parse("src/test/resources/sudoku/example06.txt");
 		Sudoku spar6Sol = new SudokuParser().parse("src/test/resources/sudoku/solutionExample06.txt");
 		Set<Clause> set6 = SudokuEncoding.encode(spar6);
+		
 		Map<Variable, Boolean> map6 = new DPLLSolver(new LeastCommonVariableHeuristic()).getModel(set6);
 		assertEquals(SudokuEncoding.decode(map6, 2), spar6Sol);
 

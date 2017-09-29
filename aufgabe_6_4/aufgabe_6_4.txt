@@ -1,0 +1,15 @@
+(siehe Benchmark.png Bild für den jUnit Benchmark)
+1. Welcher Solver liefert für Sodukus die besten Ergebnisse und warum?
+	Der DPLL-Solver liefert die besten Ergebnisse, weil hier direkt auf der Klauselmenge
+	gearbeitet wird und nicht erst ein Baum aus der Klauselmenge aufgebaut werden muss.
+2. Welche DPLL-Heuristik ist für Sudoku am besten geeignet?
+	Nach unseren Benchmarks ist die MostCommonLiteral Heuristik am schnellsten und somit am besten geeignet.
+3. Welcher Solver ist in der Lage welche Größe von Sudoku zu lösen? 
+	DPLL kann mit MostCommonVariable/MostCommonLiteral/LeastCommonLiteral kann alle 
+	Beispiel - Sudokus 1-7 lösen. Also alle Sodukus mit Base 3
+
+	DPLL mit LeastCommonVariableHeuristic kann nur Sudokus mit Base 2 lösen (Beispiel 6+7)
+
+	BDDs ist nur in der Lage Sudokus mit Base 2 zu lösen. (Beispiel 6+7)
+
+	Tableau ist in der Lage das Sudoku mit Base 1 zu lösen (Beispiel 7)
