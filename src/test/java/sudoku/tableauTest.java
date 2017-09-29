@@ -1,4 +1,4 @@
-package de.arlab.sat;
+package sudoku;
 
 import static org.junit.Assert.*;
 
@@ -23,12 +23,7 @@ public class tableauTest {
 	
 	
 	@Test
-	public void testTableau() {
-		/*System.out.println(new Tableau(new And(v1,v2)).toString());
-		System.out.println(new Tableau(v1));
-		System.out.println(new Tableau(new Or(v1,new Or(v2, v3))).toString());
-		System.out.println(new Tableau(new Or(v1 , new And(v1,v2))).toString());*/
-		
+	public void testTableau() {		
 		assertFalse(new Tableau(v1).isClosed());
 		assertTrue(new Tableau(new And(v1, new Not(v1))).isClosed());
 		assertFalse(new Tableau(new And(v1, new Not(v2))).isClosed());

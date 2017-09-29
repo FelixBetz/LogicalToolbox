@@ -86,6 +86,7 @@ public class SudokuEncoding {
 	 * @return the respective constraints as a set of clauses
 	 */
 	public static Set<Clause> atLeastOneNumEachEntry(final int base) {
+<<<<<<< HEAD
 		int length = base * base;
 		Set<Clause> clauses = new HashSet<>();
 		// loop through the rows then through the cols and then work with each number.
@@ -93,6 +94,15 @@ public class SudokuEncoding {
 			for (int col = 1; col <= length; col++) {
 				Set<Literal> set = new HashSet<>();
 				for (int n = 1; n <= length; n++) {
+=======
+		int b = base * base; // amount of numbers => sudoku width and height
+		Set<Clause> clauses = new HashSet<>();
+
+		for (int row = 1; row <= b; row++) { // for each entry in sudoku (base*base)*(base*base=) entries
+			for (int col = 1; col <= b; col++) { // width height
+				Set<Literal> set = new HashSet<>();
+				for (int n = 1; n <= b; n++) { // possible assignments for each field: 1...n
+>>>>>>> 5bde11b233fe9b3f9a5cc4fd4f57dcb15e44e5e5
 					set.add(posLit(row, col, n));
 				}
 				clauses.addAll(CCEncoding.atLeastOne(set));
@@ -111,12 +121,20 @@ public class SudokuEncoding {
 	public static Set<Clause> eachNumAtMostOnceEachRow(final int base) {
 		int length = base * base;
 		Set<Clause> clauses = new HashSet<>();
+<<<<<<< HEAD
 		// loop through the rows, then work with each number by looping through the cols
 		// for each number
 		for (int row = 1; row <= length; row++) {
 			for (int n = 1; n <= length; n++) {
 				Set<Literal> set = new HashSet<>();
 				for (int col = 1; col <= length; col++) {
+=======
+
+		for (int row = 1; row <= b; row++) {    //for each row: base*base rows
+			for (int n = 1; n <= b; n++) {
+				Set<Literal> set = new HashSet<>();
+				for (int col = 1; col <= b; col++) {   //each field can contain values from 1...n in each row
+>>>>>>> 5bde11b233fe9b3f9a5cc4fd4f57dcb15e44e5e5
 					set.add(posLit(row, col, n));
 				}
 				clauses.addAll(CCEncoding.atMostOne(set));
@@ -135,12 +153,20 @@ public class SudokuEncoding {
 	private static Set<Clause> eachNumAtMostOnceEachCol(final int base) {
 		int length = base * base;
 		Set<Clause> clauses = new HashSet<>();
+<<<<<<< HEAD
 		// loop through the cols, then work with each number by looping through the rows
 		// for each number
 		for (int col = 1; col <= length; col++) {
 			for (int n = 1; n <= length; n++) {
 				Set<Literal> set = new HashSet<>();
 				for (int row = 1; row <= length; row++) {
+=======
+
+		for (int col = 1; col <= b; col++) {   //for each column: base*base
+			for (int n = 1; n <= b; n++) {
+				Set<Literal> set = new HashSet<>();
+				for (int row = 1; row <= b; row++) {   //each field can contain values from 1...n in each column
+>>>>>>> 5bde11b233fe9b3f9a5cc4fd4f57dcb15e44e5e5
 					set.add(posLit(row, col, n));
 				}
 				clauses.addAll(CCEncoding.atMostOne(set));
@@ -159,6 +185,7 @@ public class SudokuEncoding {
 	private static Set<Clause> eachNumAtMostOnceEachSubGrid(final int base) {
 		int length = base * base;
 		Set<Clause> clauses = new HashSet<>();
+<<<<<<< HEAD
 		// we loop down and right through the rows and then for each number through the
 		// rows and cols of each grid
 		for (int rowGrid = 0; rowGrid < base; rowGrid++) {
@@ -168,6 +195,15 @@ public class SudokuEncoding {
 					for (int row = 1; row <= base; row++) {
 						for (int col = 1; col <= base; col++) {
 							set.add(posLit(row + rowGrid * base, col + colGrid * base, n));
+=======
+		for (int rgrid = 0; rgrid < base; rgrid++) {     //each row contains base subgrids
+			for (int cgrid = 0; cgrid < base; cgrid++) { //each column contains base subgrids
+				for (int n = 1; n <= base * base; n++) { //each subgrid contains base*base(amount of numbers) values
+					Set<Literal> set = new HashSet<>();
+					for (int r = 1; r <= base; r++) {	 //add clausle for each field in subgrid
+						for (int c = 1; c <= base; c++) {
+							set.add(posLit(r + rgrid * base, c + cgrid * base, n)); 
+>>>>>>> 5bde11b233fe9b3f9a5cc4fd4f57dcb15e44e5e5
 						}
 					}
 					clauses.addAll(CCEncoding.atMostOne(set));

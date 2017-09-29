@@ -1,4 +1,4 @@
-package de.arlab.sat;
+package sudoku;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +20,8 @@ import de.arlab.formulas.*;
 import de.arlab.formulas.parser.Parser;
 import de.arlab.io.DIMACSParser;
 import de.arlab.io.SudokuParser;
+import de.arlab.sat.Clause;
+import de.arlab.sat.DPLLSolver;
 import de.arlab.sat.heuristics.LeastCommonLiteralHeuristic;
 import de.arlab.sat.heuristics.LeastCommonVariableHeuristic;
 import de.arlab.sat.heuristics.MostCommonLiteralHeuristic;

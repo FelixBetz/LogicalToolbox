@@ -31,6 +31,8 @@ public class CCEncoding {
 	public static Set<Clause> atLeastOne(final Collection<Literal> literals) {
 		Set<Clause> set = new HashSet<>();
 		set.add(new Clause(literals)); // "at least one" is a simple "or", so we just build one clause.
+		Clause clause = new Clause(new Clause(literals));   //literal1 Or literal2 OR.....
+		set.add(clause);
 		return set;
 	}
 
@@ -55,7 +57,7 @@ public class CCEncoding {
 			Iterator<Literal> it = list.subList(i + 1, l).iterator();
 			while (it.hasNext()) {
 				Literal next = it.next().negate();
-				clauses.add(new Clause(lit, next));
+				clauses.add(new Clause(lit, next));         //!(x_i And x_j) <=> !x_i OR !x_j
 			}
 		}
 		return clauses;
@@ -72,7 +74,7 @@ public class CCEncoding {
 	 */
 	public static Set<Clause> exactlyOne(final Collection<Literal> literals) {
 		// (if x>=1 and x<=1 then it must be x==1), so we use the two former constraints
-		Set<Clause> set = atMostOne(literals);
+		Set<Clause> set= atMostOne(literals);  //combine atMostOne and atLeastOne
 		set.addAll(atLeastOne(literals));
 		return set;
 	}
